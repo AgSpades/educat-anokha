@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../hooks/useTheme';
 import BackgroundGradients from '../landing-page-components/BackgroundGradients';
 import ThemeToggle from '../landing-page-components/ThemeToggle';
@@ -6,6 +7,13 @@ import ecaiLogo from '../assets/ecai.png';
 
 const Register: React.FC = () => {
     const { darkMode, toggleTheme } = useTheme();
+    const navigate = useNavigate();
+
+    const handleRegister = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Simulate registration and redirect to onboarding
+        navigate('/onboarding');
+    };
 
     return (
         <div className={`min-h-screen font-sans transition-all duration-700 ease-in-out relative overflow-hidden flex items-center justify-center ${darkMode ? 'bg-zinc-950 text-zinc-100' : 'bg-zinc-50 text-zinc-900'}`}>
@@ -37,7 +45,7 @@ const Register: React.FC = () => {
                         <p className={`mt-2 text-sm ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>Start your personalized learning journey</p>
                     </div>
 
-                    <form className="space-y-4">
+                    <form className="space-y-4" onSubmit={handleRegister}>
                         <div className="animate-fade-in-up animation-delay-300 opacity-0">
                             <label htmlFor="name" className={`block text-sm font-medium mb-2 ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>Full Name</label>
                             <input
