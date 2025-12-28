@@ -5,6 +5,8 @@ import Hero from '../landing-page-components/Hero';
 
 import Features from '../landing-page-components/Features';
 import HowItWorks from '../landing-page-components/HowItWorks';
+import Testimonials from '../landing-page-components/Testimonials';
+import CallToAction from '../landing-page-components/CallToAction';
 import Footer from '../landing-page-components/Footer';
 import BackgroundGradients from '../landing-page-components/BackgroundGradients';
 
@@ -24,6 +26,10 @@ const LandingPage: React.FC = () => {
       <Features darkMode={darkMode} />
 
       <HowItWorks darkMode={darkMode} />
+
+      <Testimonials darkMode={darkMode} />
+
+      <CallToAction darkMode={darkMode} />
 
       <Footer darkMode={darkMode} />
     </div>

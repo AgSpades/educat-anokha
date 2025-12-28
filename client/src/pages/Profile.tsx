@@ -75,9 +75,13 @@ const Profile: React.FC = () => {
     const [name, setName] = useState('John Doe');
     const [email, setEmail] = useState('john@example.com');
     const [bio, setBio] = useState('Passionate learner exploring the world of technology.');
-    const [photo, setPhoto] = useState<string | null>('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80');
+    const [photo, setPhoto] = useState<string | null>(null);
     const [resumeName, setResumeName] = useState<string | null>('John_Doe_CV.pdf');
     const [isSaving, setIsSaving] = useState(false);
+
+    const getInitials = (n: string) => {
+        return n.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2);
+    };
 
     const handleSave = () => {
         setIsSaving(true);
@@ -132,7 +136,7 @@ const Profile: React.FC = () => {
                         <div className="w-px h-6 bg-zinc-200 dark:bg-zinc-800 hidden md:block"></div>
                         <ThemeToggle darkMode={darkMode} toggleTheme={toggleTheme} />
                         <div className="h-9 w-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg ring-2 ring-white/10">
-                            {photo ? <img src={photo} alt="Profile" className="h-full w-full rounded-full object-cover" /> : 'JD'}
+                            {photo ? <img src={photo} alt="Profile" className="h-full w-full rounded-full object-cover" /> : getInitials(name)}
                         </div>
                     </div>
                 </div>
@@ -147,7 +151,7 @@ const Profile: React.FC = () => {
                                 <img src={photo} alt="Profile" className="h-full w-full object-cover" />
                             ) : (
                                 <div className={`h-full w-full flex items-center justify-center text-3xl font-bold bg-gradient-to-br from-indigo-500 to-purple-600 text-white`}>
-                                    JD
+                                    {getInitials(name)}
                                 </div>
                             )}
                         </div>
@@ -293,8 +297,10 @@ const Profile: React.FC = () => {
                                 {/* Photo Upload Section */}
                                 <div className="flex items-center gap-6 pb-8 border-b border-dashed border-zinc-200 dark:border-zinc-800">
                                     <div className="relative group">
-                                        <div className={`h-24 w-24 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'}`}>
-                                            {photo ? <img src={photo} className="h-full w-full object-cover" /> : null}
+                                        <div className={`h-24 w-24 rounded-full overflow-hidden ${darkMode ? 'bg-zinc-800' : 'bg-zinc-100'} flex items-center justify-center`}>
+                                            {photo ? <img src={photo} className="h-full w-full object-cover" /> : (
+                                                <span className={`text-2xl font-bold ${darkMode ? 'text-zinc-600' : 'text-zinc-400'}`}>{getInitials(name)}</span>
+                                            )}
                                         </div>
                                         <label className="absolute inset-0 flex items-center justify-center bg-black/50 text-white rounded-full opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity">
                                             <span className="text-xs font-medium">Change</span>
