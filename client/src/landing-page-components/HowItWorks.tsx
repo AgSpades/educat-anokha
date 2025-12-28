@@ -28,12 +28,12 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ darkMode }) => {
                         </div>
                     </ScrollReveal>
 
-                    <ScrollReveal animation="slide-in-right" delay={200} className="order-1 lg:order-2">
+                    <ScrollReveal animation="slide-in-right" delay={200} className="order-1 lg:order-2 text-center md:text-left lg:text-center">
                         <h2 className={`text-3xl lg:text-5xl font-bold mb-8 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Intelligence meets <br /> infrastructure.</h2>
                         <p className={`text-lg leading-relaxed mb-8 ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
                             Traditional learning platforms are disconnected from industry needs. We bridge the gap by combining real-time market data with your personal capabilities.
                         </p>
-                        <div className="flex gap-4">
+                        <div className="flex gap-4 justify-center md:justify-start lg:justify-center">
                             {badges.map((badge) => (
                                 <div key={badge} className={`px-6 py-3 rounded-xl border text-sm font-medium ${darkMode ? 'bg-white/[0.05] border-white/10 text-zinc-300' : 'bg-white border-zinc-200 text-zinc-700 shadow-sm'}`}>
                                     {badge}

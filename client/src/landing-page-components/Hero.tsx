@@ -13,7 +13,8 @@ const Hero: React.FC<HeroProps> = ({ darkMode }) => {
 
                     {/* Left Content */}
                     {/* Left Content */}
-                    <div className='max-w-2xl'>
+                    {/* Left Content */}
+                    <div className='max-w-2xl flex flex-col items-center text-center lg:items-start lg:text-left'>
                         <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-6 border animate-fade-in-up ${darkMode ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' : 'bg-indigo-50 border-indigo-100 text-indigo-600'}`}>
                             <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
                             AI-Powered Architecture
@@ -30,7 +31,7 @@ const Hero: React.FC<HeroProps> = ({ darkMode }) => {
                             Stop guessing your next move. Our AI architects your unified career roadmap, verified instantly on the blockchain.
                         </p>
 
-                        <div className='flex flex-col sm:flex-row gap-4 animate-fade-in-up animation-delay-300 opacity-0'>
+                        <div className='flex flex-col sm:flex-row gap-4 animate-fade-in-up animation-delay-300 opacity-0 justify-center lg:justify-start'>
                             <a href="#how-it-works" className={`inline-block text-center px-8 py-4 rounded-xl text-md font-bold transition-all transform hover:-translate-y-1 shadow-xl hover:shadow-2xl ${darkMode ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-500/20' : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-600/20'}`}>
                                 Generate Roadmap
                             </a>
