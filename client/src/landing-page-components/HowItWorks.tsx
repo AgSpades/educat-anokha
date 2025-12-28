@@ -1,16 +1,19 @@
 import React from 'react';
 import { howItWorksSteps, badges } from '../data/landingPageData';
+import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
 
 interface HowItWorksProps {
     darkMode: boolean;
 }
 
 const HowItWorks: React.FC<HowItWorksProps> = ({ darkMode }) => {
+    const { elementRef, isVisible } = useIntersectionObserver();
+
     return (
-        <section id="how-it-works" className={`py-32 ${darkMode ? 'bg-zinc-900/50' : 'bg-zinc-50'}`}>
+        <section id="how-it-works" ref={elementRef} className={`py-32 ${darkMode ? 'bg-zinc-900/50' : 'bg-zinc-50'}`}>
             <div className='max-w-7xl mx-auto px-6 lg:px-8'>
                 <div className="grid lg:grid-cols-2 gap-20 items-center">
-                    <div className="order-2 lg:order-1 relative">
+                    <div className={`order-2 lg:order-1 relative transition-all duration-700 transform ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-20 opacity-0'}`}>
                         <div className="absolute -inset-4 bg-gradient-to-r from-indigo-500/20 to-violet-500/20 rounded-[2rem] blur-xl opacity-30"></div>
                         <div className={`relative border rounded-[2rem] p-8 md:p-12 space-y-8 ${darkMode ? 'bg-zinc-950 border-white/10' : 'bg-white border-zinc-200 shadow-xl'}`}>
                             {howItWorksSteps.map((item, i) => (
@@ -26,7 +29,7 @@ const HowItWorks: React.FC<HowItWorksProps> = ({ darkMode }) => {
                             ))}
                         </div>
                     </div>
-                    <div className="order-1 lg:order-2">
+                    <div className={`order-1 lg:order-2 transition-all duration-700 delay-200 transform ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-20 opacity-0'}`}>
                         <h2 className={`text-3xl lg:text-5xl font-bold mb-8 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Intelligence meets <br /> infrastructure.</h2>
                         <p className={`text-lg leading-relaxed mb-8 ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
                             Traditional learning platforms are disconnected from industry needs. We bridge the gap by combining real-time market data with your personal capabilities.
