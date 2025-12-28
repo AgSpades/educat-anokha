@@ -56,7 +56,7 @@ const Onboarding: React.FC = () => {
         // Here you would typically send the answers to a backend
         console.log("Submitted answers:", answers);
         // For now, redirect to home or dashboard
-        navigate('/');
+        navigate('/profile');
     };
 
     const isComplete = questions.every(q => answers[q.id]);
