@@ -9,7 +9,7 @@ interface FeaturesProps {
 
 const Features: React.FC<FeaturesProps> = ({ darkMode }) => {
     return (
-        <section id="features" className='py-32 relative'>
+        <section id="features" className='py-16 md:py-32 relative'>
             <div className='max-w-7xl mx-auto px-6 lg:px-8'>
                 <ScrollReveal animation="fade-in-up">
                     <div className='mb-20 text-center md:text-left'>

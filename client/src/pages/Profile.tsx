@@ -70,6 +70,7 @@ const currentCourses: Course[] = [
 const Profile: React.FC = () => {
     const { darkMode, toggleTheme } = useTheme();
     const [activeTab, setActiveTab] = useState<'overview' | 'courses' | 'settings'>('overview');
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     // Profile State
     const [name, setName] = useState('John Doe');
@@ -135,9 +136,46 @@ const Profile: React.FC = () => {
                         </div>
                         <div className="w-px h-6 bg-zinc-200 dark:bg-zinc-800 hidden md:block"></div>
                         <ThemeToggle darkMode={darkMode} toggleTheme={toggleTheme} />
-                        <div className="h-9 w-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg ring-2 ring-white/10">
+                        <div className="h-9 w-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg ring-2 ring-white/10 hidden md:flex">
                             {photo ? <img src={photo} alt="Profile" className="h-full w-full rounded-full object-cover" /> : getInitials(name)}
                         </div>
+
+                        {/* Mobile Menu Button */}
+                        <button
+                            className='md:hidden p-2 rounded-lg transition-colors'
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            aria-label="Toggle menu"
+                        >
+                            {isMobileMenuOpen ? (
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke={darkMode ? "white" : "black"} className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke={darkMode ? "white" : "black"} className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                </svg>
+                            )}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Mobile Menu */}
+                <div className={`md:hidden overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                    <div className={`px-6 pt-2 pb-6 space-y-4 border-t ${darkMode ? 'bg-zinc-950/95 border-white/5' : 'bg-white/95 border-zinc-200'}`}>
+                        {['overview', 'courses', 'settings'].map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => {
+                                    setActiveTab(tab as any);
+                                    setIsMobileMenuOpen(false);
+                                }}
+                                className={`block w-full text-left text-base font-medium py-2 transition-colors capitalize ${activeTab === tab
+                                    ? (darkMode ? 'text-white' : 'text-zinc-900')
+                                    : (darkMode ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-indigo-600')}`}
+                            >
+                                {tab}
+                            </button>
+                        ))}
                     </div>
                 </div>
             </nav>

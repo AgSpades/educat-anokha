@@ -7,10 +7,10 @@ interface CallToActionProps {
 
 const CallToAction: React.FC<CallToActionProps> = ({ darkMode }) => {
     return (
-        <section className="py-24 relative overflow-hidden">
+        <section className="py-12 md:py-24 relative overflow-hidden">
             <div className="max-w-5xl mx-auto px-6 relative z-10 text-center">
                 <ScrollReveal animation="scale-in">
-                    <div className={`rounded-3xl p-12 md:p-20 relative overflow-hidden border ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'} shadow-2xl`}>
+                    <div className={`rounded-3xl p-8 md:p-20 relative overflow-hidden border ${darkMode ? 'bg-zinc-900 border-zinc-800' : 'bg-white border-zinc-200'} shadow-2xl`}>
                         {/* Background decoration */}
                         <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-30 pointer-events-none">
                             <div className="absolute -top-[50%] -left-[20%] w-[80%] h-[150%] bg-indigo-500/20 blur-[120px] rounded-full mix-blend-multiply filter"></div>

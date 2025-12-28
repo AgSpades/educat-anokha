@@ -42,18 +42,11 @@ const Hero: React.FC<HeroProps> = ({ darkMode }) => {
 
                     {/* Right Visual */}
                     <div className='relative lg:h-[600px] w-full flex items-center justify-center p-8 animate-fade-in-up animation-delay-400 opacity-0'>
-                        {/* Decorative Elements */}
-                        <div className={`absolute inset-0 border rounded-full scale-110 opacity-20 ${darkMode ? 'border-indigo-500/20' : 'border-indigo-200'}`}></div>
-                        <div className={`absolute inset-0 border rounded-full scale-75 opacity-20 ${darkMode ? 'border-violet-500/20' : 'border-violet-200'}`}></div>
-
-                        <div className={`relative z-10 rounded-2xl overflow-hidden shadow-2xl transition-transform duration-500 hover:scale-[1.02] border ${darkMode ? 'border-white/10 bg-zinc-900 shadow-black/50' : 'border-zinc-200 bg-white shadow-zinc-200/50'}`}>
-                            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 to-transparent pointer-events-none"></div>
-                            <img
-                                src={ecaiLogo}
-                                alt="Platform Visualization"
-                                className='w-full h-auto object-cover max-w-md mx-auto'
-                            />
-                        </div>
+                        <img
+                            src={ecaiLogo}
+                            alt="Platform Visualization"
+                            className='w-full h-auto object-cover max-w-[250px] mx-auto transition-transform duration-500 hover:scale-[1.02]'
+                        />
                     </div>
                 </div>
             </div>

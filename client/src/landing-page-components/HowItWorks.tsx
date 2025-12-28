@@ -8,7 +8,7 @@ interface HowItWorksProps {
 
 const HowItWorks: React.FC<HowItWorksProps> = ({ darkMode }) => {
     return (
-        <section id="how-it-works" className={`py-32 ${darkMode ? 'bg-zinc-900/50' : 'bg-zinc-50'}`}>
+        <section id="how-it-works" className={`py-16 md:py-32 ${darkMode ? 'bg-zinc-900/50' : 'bg-zinc-50'}`}>
             <div className='max-w-7xl mx-auto px-6 lg:px-8'>
                 <div className="grid lg:grid-cols-2 gap-20 items-center">
                     <ScrollReveal animation="slide-in-left" className="order-2 lg:order-1 relative">

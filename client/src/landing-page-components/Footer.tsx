@@ -7,7 +7,7 @@ interface FooterProps {
 
 const Footer: React.FC<FooterProps> = ({ darkMode }) => {
     return (
-        <footer className={`pt-24 pb-12 relative overflow-hidden ${darkMode ? 'border-t border-white/5 bg-black' : 'border-t border-zinc-200 bg-zinc-50'}`}>
+        <footer className={`pt-12 md:pt-24 pb-12 relative overflow-hidden ${darkMode ? 'border-t border-white/5 bg-black' : 'border-t border-zinc-200 bg-zinc-50'}`}>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent"></div>
 
             <div className='max-w-7xl mx-auto px-6 lg:px-8 text-center relative z-10'>

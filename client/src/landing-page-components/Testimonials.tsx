@@ -34,7 +34,7 @@ const testimonials = [
 
 const Testimonials: React.FC<TestimonialsProps> = ({ darkMode }) => {
     return (
-        <section className={`py-24 relative overflow-hidden ${darkMode ? 'bg-zinc-900/30' : 'bg-zinc-50/50'}`}>
+        <section className={`py-12 md:py-24 relative overflow-hidden ${darkMode ? 'bg-zinc-900/30' : 'bg-zinc-50/50'}`}>
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                 <ScrollReveal animation="fade-in-up">
                     <div className="text-center mb-16">
