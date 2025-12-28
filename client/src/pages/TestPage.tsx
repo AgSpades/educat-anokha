@@ -38,7 +38,7 @@ export default function TestPage() {
 
     }
     return (
-        <div className={`min-h-screen font-sans transition-colors duration-300 ${darkMode ? 'bg-zinc-950 text-zinc-100' : 'bg-white text-zinc-900'}`}>
+        <div className={`min-h-screen font-sans transition-all duration-700 ease-in-out ${darkMode ? 'bg-zinc-950 text-zinc-100' : 'bg-white text-zinc-900'}`}>
             {/* Theme Toggle - Fixed Position */}
             <div className="fixed top-4 right-4 z-50">
                 <ThemeToggle darkMode={darkMode} toggleTheme={toggleTheme} />

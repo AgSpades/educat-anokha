@@ -12,7 +12,7 @@ const LandingPage: React.FC = () => {
   const { darkMode, toggleTheme } = useTheme();
 
   return (
-    <div className={`min-h-screen font-sans transition-colors duration-300 ${darkMode ? 'bg-zinc-950 text-zinc-100' : 'bg-white text-zinc-900'}`}>
+    <div className={`min-h-screen font-sans transition-all duration-700 ease-in-out ${darkMode ? 'bg-zinc-950 text-zinc-100' : 'bg-white text-zinc-900'}`}>
       <BackgroundGradients />
 
       <Navbar darkMode={darkMode} toggleTheme={toggleTheme} />

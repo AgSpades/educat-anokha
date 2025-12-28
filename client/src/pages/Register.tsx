@@ -8,7 +8,7 @@ const Register: React.FC = () => {
     const { darkMode, toggleTheme } = useTheme();
 
     return (
-        <div className={`min-h-screen font-sans transition-colors duration-300 relative overflow-hidden flex items-center justify-center ${darkMode ? 'bg-zinc-950 text-zinc-100' : 'bg-zinc-50 text-zinc-900'}`}>
+        <div className={`min-h-screen font-sans transition-all duration-700 ease-in-out relative overflow-hidden flex items-center justify-center ${darkMode ? 'bg-zinc-950 text-zinc-100' : 'bg-zinc-50 text-zinc-900'}`}>
             <BackgroundGradients />
 
             {/* Theme Toggle - Fixed Position */}

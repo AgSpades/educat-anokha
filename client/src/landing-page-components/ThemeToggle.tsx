@@ -10,7 +10,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({ darkMode, toggleTheme, classN
     return (
         <button
             onClick={toggleTheme}
-            className={`p-2 rounded-full transition-colors duration-300 ${darkMode ? 'bg-white/5 hover:bg-white/10 text-yellow-400' : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-600'} ${className}`}
+            className={`p-2 rounded-full transition-all duration-500 ease-in-out transform hover:scale-110 ${darkMode ? 'bg-white/5 hover:bg-white/10 text-yellow-400' : 'bg-zinc-100 hover:bg-zinc-200 text-zinc-600'} ${className}`}
             aria-label="Toggle Theme"
         >
             {darkMode ? (

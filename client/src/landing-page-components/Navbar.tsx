@@ -11,7 +11,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ darkMode, toggleTheme }) => {
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${darkMode ? 'bg-zinc-950/80 border-white/5' : 'bg-white/80 border-zinc-200'} backdrop-blur-md border-b`}>
+        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ease-in-out ${darkMode ? 'bg-zinc-950/80 border-white/5' : 'bg-white/80 border-zinc-200'} backdrop-blur-md border-b`}>
             <div className='max-w-7xl mx-auto px-6 lg:px-8'>
                 <div className='flex items-center justify-between h-20'>
                     {/* Logo */}
