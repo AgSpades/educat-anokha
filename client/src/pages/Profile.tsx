@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useTheme } from '../hooks/useTheme';
+import { useThemeContext } from '../contexts/ThemeContext';
 import BackgroundGradients from '../landing-page-components/BackgroundGradients';
 import ProfileNavbar from '../profile-components/ProfileNavbar';
 import ProfileHeader from '../profile-components/ProfileHeader';
@@ -8,7 +8,7 @@ import CourseExplorer from '../profile-components/CourseExplorer';
 import ProfileSettings from '../profile-components/ProfileSettings';
 
 const Profile: React.FC = () => {
-    const { darkMode, toggleTheme } = useTheme();
+    const { darkMode, toggleTheme } = useThemeContext();
     const [activeTab, setActiveTab] = useState<'overview' | 'courses' | 'settings'>('overview');
 
     // Profile State (Shared across Navbar, Header, Settings)

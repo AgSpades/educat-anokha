@@ -1,21 +1,21 @@
 import React from 'react';
+import type { ReactNode } from 'react';
+import { useThemeContext } from '../contexts/ThemeContext';
 import BackgroundGradients from '../landing-page-components/BackgroundGradients';
 import ThemeToggle from '../landing-page-components/ThemeToggle';
 import ecaiLogo from '../assets/ecai.png';
 
 interface AuthLayoutProps {
-    children: React.ReactNode;
-    darkMode: boolean;
-    toggleTheme: () => void;
+    children: ReactNode;
     maxWidth?: string;
 }
 
 const AuthLayout: React.FC<AuthLayoutProps> = ({
     children,
-    darkMode,
-    toggleTheme,
     maxWidth = 'max-w-md'
 }) => {
+    const { darkMode, toggleTheme } = useThemeContext();
+
     return (
         <div className={`min-h-screen font-sans transition-all duration-700 ease-in-out relative overflow-hidden flex items-center justify-center ${darkMode ? 'bg-zinc-950 text-zinc-100' : 'bg-zinc-50 text-zinc-900'}`}>
             <BackgroundGradients />

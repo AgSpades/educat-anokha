@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useThemeContext } from '../contexts/ThemeContext';
 
 interface Question {
     id: number;
@@ -35,12 +36,9 @@ const questions: Question[] = [
     }
 ];
 
-interface OnboardingFormProps {
-    darkMode: boolean;
-}
-
-const OnboardingForm: React.FC<OnboardingFormProps> = ({ darkMode }) => {
+const OnboardingForm: React.FC = () => {
     const navigate = useNavigate();
+    const { darkMode } = useThemeContext();
     const [answers, setAnswers] = useState<Record<number, string>>({});
 
     const handleOptionSelect = (questionId: number, option: string) => {

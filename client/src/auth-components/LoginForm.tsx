@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useThemeContext } from '../contexts/ThemeContext';
 
-interface LoginFormProps {
-    darkMode: boolean;
-}
-
-const LoginForm: React.FC<LoginFormProps> = ({ darkMode }) => {
+const LoginForm: React.FC = () => {
     const navigate = useNavigate();
+    const { darkMode } = useThemeContext();
     const [showPassword, setShowPassword] = useState(false);
 
     const handleLogin = (e: React.FormEvent) => {

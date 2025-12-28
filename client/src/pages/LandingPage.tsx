@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '../hooks/useTheme';
+import { useThemeContext } from '../contexts/ThemeContext';
 import Navbar from '../landing-page-components/Navbar';
 import Hero from '../landing-page-components/Hero';
 
@@ -11,7 +11,7 @@ import Footer from '../landing-page-components/Footer';
 import BackgroundGradients from '../landing-page-components/BackgroundGradients';
 
 const LandingPage: React.FC = () => {
-  const { darkMode, toggleTheme } = useTheme();
+  const { darkMode, toggleTheme } = useThemeContext();
 
   return (
     <div className={`min-h-screen font-sans transition-all duration-700 ease-in-out ${darkMode ? 'bg-zinc-950 text-zinc-100' : 'bg-white text-zinc-900'}`}>

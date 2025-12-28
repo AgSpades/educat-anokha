@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTheme } from '../hooks/useTheme';
+import { useThemeContext } from '../contexts/ThemeContext';
 import RoadmapNavbar from '../roadmap-components/RoadmapNavbar';
 import RoadmapPath from '../roadmap-components/RoadmapPath';
 
@@ -12,7 +12,7 @@ interface RoadmapNode {
 }
 
 const Roadmap: React.FC = () => {
-    const { darkMode, toggleTheme } = useTheme();
+    const { darkMode, toggleTheme } = useThemeContext();
 
     const nodes: RoadmapNode[] = [
         { id: '1', title: 'Python Basics', status: 'completed', description: 'Mastering syntax, loops, and functions.', position: { x: 50, y: 10 } },
