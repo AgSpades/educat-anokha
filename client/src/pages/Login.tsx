@@ -1,12 +1,11 @@
-import React from 'react';
-import AuthLayout from '../auth-components/AuthLayout';
+import SplitAuthLayout from '../auth-components/SplitAuthLayout';
 import LoginForm from '../auth-components/LoginForm';
 
 const Login: React.FC = () => {
     return (
-        <AuthLayout>
+        <SplitAuthLayout>
             <LoginForm />
-        </AuthLayout>
+        </SplitAuthLayout>
     );
 };
 

@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
+// import { questions } from '../onboarding-components/OnboardingForm'; // Unused now
 
 interface DashboardOverviewProps {
     darkMode: boolean;
 }
 
 const DashboardOverview: React.FC<DashboardOverviewProps> = ({ darkMode }) => {
-    // Goals State - Moved here since it's only used here
+    // Goals State
     const [dailyGoals, setDailyGoals] = useState([
         { text: "Complete Neural Networks Module", done: false },
         { text: "Review React Hooks Notes", done: true },
         { text: "Practice Python for 30 mins", done: false }
     ]);
+
+    // Preferences State REMOVED
 
     const toggleGoal = (index: number) => {
         const newGoals = [...dailyGoals];
@@ -28,7 +31,7 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({ darkMode }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
 
                 {/* Main Focus Card - Spans Full Width */}
-                <div className={`md:col-span-3 rounded-3xl p-8 relative overflow-hidden border transition-all hover:shadow-lg group ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'}`}>
+                <div className={`md:col-span-3 rounded-3xl p-6 md:p-8 relative overflow-hidden border transition-all hover:shadow-lg group ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'}`}>
                     <div className="relative z-10 flex flex-col h-full justify-between">
                         <div>
                             <div className="flex justify-between items-start mb-6">
@@ -59,9 +62,6 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({ darkMode }) => {
                             <button className={`px-6 py-2.5 rounded-lg font-semibold text-white transition-all hover:bg-indigo-700 active:scale-95 bg-indigo-600 shadow-sm`}>
                                 Continue Learning
                             </button>
-                            <a href="/roadmap" className={`px-6 py-2.5 rounded-lg font-semibold border transition-all active:scale-95 flex items-center justify-center gap-2 ${darkMode ? 'border-zinc-700 hover:bg-zinc-800 text-white' : 'border-zinc-200 hover:bg-zinc-50 text-zinc-700'}`}>
-                                View Roadmap
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -134,6 +134,8 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({ darkMode }) => {
                         ))}
                     </div>
                 </div>
+
+                {/* REMOVED CAREER PROFILE FROM HERE */}
 
             </div>
         </div>
