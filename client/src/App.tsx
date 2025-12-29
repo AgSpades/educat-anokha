@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import Onboarding from './pages/Onboarding';
 import Profile from './pages/Profile';
 import Roadmap from './pages/Roadmap';
+import Jobs from './pages/Jobs';
 
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -23,6 +24,7 @@ function App() {
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/roadmap" element={<Roadmap />} />
+            <Route path="/jobs" element={<Jobs />} />
           </Routes>
         </AuthProvider>
       </ThemeProvider>
