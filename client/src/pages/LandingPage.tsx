@@ -4,6 +4,7 @@ import Navbar from '../landing-page-components/Navbar';
 import Hero from '../landing-page-components/Hero';
 
 import Features from '../landing-page-components/Features';
+import InteractiveRoadmap from '../landing-page-components/InteractiveRoadmap';
 import HowItWorks from '../landing-page-components/HowItWorks';
 import Testimonials from '../landing-page-components/Testimonials';
 import CallToAction from '../landing-page-components/CallToAction';
@@ -24,6 +25,8 @@ const LandingPage: React.FC = () => {
 
 
       <Features darkMode={darkMode} />
+
+      <InteractiveRoadmap darkMode={darkMode} />
 
       <HowItWorks darkMode={darkMode} />
 

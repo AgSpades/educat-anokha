@@ -37,7 +37,7 @@ const RegisterForm: React.FC = () => {
     };
 
     return (
-        <div className={`rounded-2xl shadow-xl backdrop-blur-md border p-8 animate-scale-in animation-delay-200 opacity-0 ${darkMode ? 'bg-zinc-900/50 border-white/10' : 'bg-white/80 border-zinc-200'}`}>
+        <div className={`w-full animate-scale-in animation-delay-200 opacity-0`}>
             <div className="text-center mb-8">
                 <h2 className={`text-2xl font-bold ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Create an Account</h2>
                 <p className={`mt-2 text-sm ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>Start your personalized learning journey</p>

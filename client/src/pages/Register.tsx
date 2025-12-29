@@ -1,12 +1,11 @@
-import React from 'react';
-import AuthLayout from '../auth-components/AuthLayout';
+import SplitAuthLayout from '../auth-components/SplitAuthLayout';
 import RegisterForm from '../auth-components/RegisterForm';
 
 const Register: React.FC = () => {
     return (
-        <AuthLayout>
+        <SplitAuthLayout variant="register">
             <RegisterForm />
-        </AuthLayout>
+        </SplitAuthLayout>
     );
 };
 
