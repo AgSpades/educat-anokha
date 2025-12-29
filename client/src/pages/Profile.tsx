@@ -36,7 +36,7 @@ const Profile: React.FC = () => {
                 getInitials={getInitials}
             />
 
-            <main className="flex-1 w-full max-w-7xl mx-auto px-6 py-28 relative z-10">
+            <main className="flex-1 w-full max-w-7xl mx-auto px-4 md:px-6 py-24 md:py-28 relative z-10">
                 <ProfileHeader
                     darkMode={darkMode}
                     name={name}

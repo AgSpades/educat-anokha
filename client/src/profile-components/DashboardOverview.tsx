@@ -31,7 +31,7 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({ darkMode }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
 
                 {/* Main Focus Card - Spans Full Width */}
-                <div className={`md:col-span-3 rounded-3xl p-8 relative overflow-hidden border transition-all hover:shadow-lg group ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'}`}>
+                <div className={`md:col-span-3 rounded-3xl p-6 md:p-8 relative overflow-hidden border transition-all hover:shadow-lg group ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'}`}>
                     <div className="relative z-10 flex flex-col h-full justify-between">
                         <div>
                             <div className="flex justify-between items-start mb-6">

@@ -87,7 +87,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
 
     return (
         <div className="max-w-3xl mx-auto animate-fade-in-up">
-            <div className={`rounded-3xl p-8 border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'}`}>
+            <div className={`rounded-3xl p-6 md:p-8 border ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'}`}>
                 <h2 className={`text-2xl font-bold mb-8 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Profile Settings</h2>
 
                 <div className="space-y-8">
