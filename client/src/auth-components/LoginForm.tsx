@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; 
 import { useThemeContext } from '../contexts/ThemeContext';
 
 const LoginForm: React.FC = () => {
@@ -9,8 +9,7 @@ const LoginForm: React.FC = () => {
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
-        // Simulate login and redirect to onboarding
-        navigate('/onboarding');
+        navigate('/profile')
     };
 
     return (
