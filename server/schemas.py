@@ -68,6 +68,32 @@ class ApplicationOutcomeRequest(BaseModel):
     applied_date: Optional[datetime] = None
 
 
+class ResumeUploadRequest(BaseModel):
+    """Request for resume parsing."""
+    user_id: str
+    file_type: str = Field(..., description="File type: pdf or docx")
+
+
+class JobRecommendationRequest(BaseModel):
+    """Request for job recommendations."""
+    user_id: str
+    limit: int = Field(default=10, ge=1, le=50)
+    location: Optional[str] = Field(default="Remote")
+
+
+class MarketTrendsRequest(BaseModel):
+    """Request for market trends analysis."""
+    role: str = Field(..., description="Job role to analyze")
+    location: str = Field(default="Remote")
+
+
+class LearningResourcesRequest(BaseModel):
+    """Request for learning resources."""
+    skill: str = Field(..., description="Skill to learn")
+    level: SkillLevel = Field(default=SkillLevel.BEGINNER)
+    resource_types: Optional[List[str]] = Field(default=None)
+
+
 # ============== Response Models ==============
 
 class Skill(BaseModel):
@@ -149,6 +175,59 @@ class WeeklyProgress(BaseModel):
     total_hours_invested: float
     achievements: List[str]
     next_week_goals: List[str]
+
+
+class ResumeParseResponse(BaseModel):
+    """Response from resume parsing."""
+    name: Optional[str]
+    email: Optional[str]
+    phone: Optional[str]
+    education: List[Dict[str, Any]]
+    experience: List[Dict[str, Any]]
+    skills: List[str]
+    certifications: List[str]
+    projects: List[Dict[str, Any]]
+    parsed_at: str
+
+
+class JobRecommendationResponse(BaseModel):
+    """Job recommendation response."""
+    company: str
+    title: str
+    location: str
+    job_type: str
+    match_score: int
+    required_skills: List[str]
+    salary_range: Dict[str, Any]
+    description: str
+    url: str
+    recommendation_reason: str
+
+
+class MarketTrendsResponse(BaseModel):
+    """Market trends analysis response."""
+    role: str
+    location: str
+    demand_level: str
+    salary_range: Dict[str, Any]
+    top_skills: List[str]
+    growth_trajectory: str
+    top_companies: List[str]
+    remote_percentage: int
+    entry_level_opportunities: str
+    key_trends: List[str]
+
+
+class LearningResource(BaseModel):
+    """Learning resource model."""
+    title: str
+    type: str
+    platform: str
+    url: str
+    duration: str
+    topics: List[str]
+    prerequisites: List[str]
+    difficulty: str
 
 
 # ============== Health Check ==============

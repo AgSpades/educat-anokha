@@ -1,5 +1,5 @@
 """Main FastAPI application for Career Mentor API."""
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from datetime import datetime
@@ -15,9 +15,19 @@ from schemas import (
     ApplicationOutcomeRequest,
     MemorySummary,
     WeeklyProgress,
-    HealthResponse
+    HealthResponse,
+    ResumeParseResponse,
+    JobRecommendationRequest,
+    JobRecommendationResponse,
+    MarketTrendsRequest,
+    MarketTrendsResponse,
+    LearningResourcesRequest,
+    LearningResource
 )
 from services import CareerMentorService
+from resume_parser import resume_parser
+from job_recommender import job_engine
+from learning_resources import learning_resources
 
 # Configure logging
 logging.basicConfig(
@@ -281,3 +291,161 @@ if __name__ == "__main__":
         port=settings.API_PORT,
         reload=settings.DEBUG
     )
+
+# ============== NEW: High Priority Features ==============
+
+@app.post("/agent/resume/parse", response_model=ResumeParseResponse)
+async def parse_resume(
+    user_id: str,
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db)
+):
+    """
+    Parse resume and extract structured information.
+    
+    Accepts PDF or DOCX files.
+    """
+    try:
+        from resume_parser import resume_parser
+        
+        # Validate file type
+        allowed_types = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+        if file.content_type not in allowed_types:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Unsupported file type. Allowed: PDF, DOCX. Got: {file.content_type}"
+            )
+        
+        # Read file content
+        file_content = await file.read()
+        
+        # Parse resume
+        parsed_data = await resume_parser.parse_resume(file_content, file.content_type)
+        
+        # Ensure user profile exists
+        ensure_user_profile(db, user_id)
+        
+        # Update user profile with extracted skills
+        profile = db.query(UserProfile).filter(UserProfile.user_id == user_id).first()
+        if profile and parsed_data.get('skills'):
+            # Get current skills as a Python list
+            current_skills_list = profile.skills if profile.skills else []  # type: ignore
+            if not isinstance(current_skills_list, list):
+                current_skills_list = []
+            
+            existing_skills = {s['name'] if isinstance(s, dict) else str(s) for s in current_skills_list}
+            new_skills = [
+                {"name": skill, "level": "intermediate", "verified": True}
+                for skill in parsed_data['skills']
+                if skill not in existing_skills
+            ]
+            if new_skills:
+                updated_skills = current_skills_list + new_skills
+                db.query(UserProfile).filter(UserProfile.user_id == user_id).update(
+                    {"skills": updated_skills},
+                    synchronize_session=False
+                )
+            db.commit()
+        
+        logger.info(f"Successfully parsed resume for user {user_id}")
+        return parsed_data
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error parsing resume: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/agent/jobs/recommend")
+async def recommend_jobs(
+    request: JobRecommendationRequest,
+    db: Session = Depends(get_db)
+):
+    """
+    Get personalized job recommendations based on user profile.
+    
+    Analyzes skills, experience, and career goals to match relevant opportunities.
+    """
+    try:
+        from job_recommender import job_engine
+        
+        jobs = await job_engine.recommend_jobs(
+            db=db,
+            user_id=request.user_id,
+            limit=request.limit
+        )
+        
+        if not jobs:
+            raise HTTPException(
+                status_code=404,
+                detail="No job recommendations found. Please update your profile."
+            )
+        
+        return {
+            "user_id": request.user_id,
+            "total_recommendations": len(jobs),
+            "jobs": jobs,
+            "generated_at": datetime.utcnow().isoformat()
+        }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error generating job recommendations: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/agent/market/trends", response_model=MarketTrendsResponse)
+async def analyze_market_trends(
+    request: MarketTrendsRequest
+):
+    """
+    Analyze current job market trends for a specific role.
+    
+    Provides insights on demand, salary, top skills, and hiring trends.
+    """
+    try:
+        from job_recommender import job_engine
+        
+        trends = await job_engine.analyze_market_trends(
+            role=request.role,
+            location=request.location
+        )
+        
+        return trends
+    
+    except Exception as e:
+        logger.error(f"Error analyzing market trends: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/agent/resources/learning")
+async def get_learning_resources(
+    request: LearningResourcesRequest
+):
+    """
+    Get personalized learning resources for a skill.
+    
+    Returns courses, tutorials, videos, and project ideas.
+    """
+    try:
+        from learning_resources import learning_resources
+        
+        resources = await learning_resources.get_resources_for_skill(
+            skill=request.skill,
+            level=request.level.value,
+            resource_types=request.resource_types if request.resource_types else None
+        )
+        
+        return {
+            "skill": request.skill,
+            "level": request.level,
+            "total_resources": len(resources),
+            "resources": resources,
+            "generated_at": datetime.utcnow().isoformat()
+        }
+    
+    except Exception as e:
+        logger.error(f"Error fetching learning resources: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))

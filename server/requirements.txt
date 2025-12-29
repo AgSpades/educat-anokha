@@ -30,6 +30,13 @@ aiohttp
 numpy
 pandas
 
+# Document Parsing
+PyPDF2
+python-docx
+beautifulsoup4
+lxml
+python-magic
+
 # Utilities
 python-multipart
 python-jose[cryptography]
