@@ -8,9 +8,12 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://postgres:password@db:5432/career_mentor_db
-      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
-      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-pro}
+      - DATABASE_URL=postgresql://myuser:mypassword@db:5432/career_mentor_db
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-claude-3-5-sonnet-20241022}
+      - VOYAGE_API_KEY=${VOYAGE_API_KEY}
+      - VOYAGE_MODEL=${VOYAGE_MODEL:-voyage-3.5}
+      - VECTOR_DIMENSION=1024
       - ENVIRONMENT=production
       - DEBUG=False
     depends_on:
@@ -20,20 +23,20 @@ services:
     networks:
       - career-mentor-network
 
-  # PostgreSQL Database
+  # PostgreSQL Database with pgvector extension
   db:
-    image: pgvector/pgvector:pg16
-    container_name: career-mentor-db
+    image: pgvector/pgvector:pg17
+    container_name: postgres
     environment:
       - POSTGRES_DB=career_mentor_db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U myuser"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -42,7 +45,7 @@ services:
       - career-mentor-network
 
 volumes:
-  postgres_data:
+  pgdata:
 
 networks:
   career-mentor-network:
