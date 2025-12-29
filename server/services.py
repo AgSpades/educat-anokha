@@ -248,7 +248,15 @@ class CareerMentorService:
                 current_skills = profile.skills or []
                 for skill in learned_skills:
                     # Add or update skill
-                    existing = next((s for s in current_skills if s['name'].lower() == skill.lower()), None)
+                    existing = next(
+                        (
+                            s
+                            for s in current_skills
+                            if isinstance(s, dict)
+                            and s.get("name", "").lower() == skill.lower()
+                        ),
+                        None,
+                    )
                     if existing:
                         existing['last_used'] = datetime.utcnow().isoformat()
                     else:
