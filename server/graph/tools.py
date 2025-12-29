@@ -214,7 +214,7 @@ class CareerMentorTools:
             # Parse LLM response
             projects = json.loads(response.content)
             return projects
-        except:
+        except (json.JSONDecodeError, TypeError, ValueError):
             # Fallback projects
             return [
                 {
