@@ -8,9 +8,10 @@ pydantic-settings
 # LangChain & LangGraph
 langchain
 langchain-community
-langchain-google-genai
+langchain-anthropic
 langgraph
 langchain-postgres
+voyageai
 
 # Database & Vector Store
 psycopg2-binary

@@ -19,9 +19,13 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = "sqlite:///./career_mentor.db"
     
-    # Google Gemini
-    GOOGLE_API_KEY: str
-    GEMINI_MODEL: str = "gemini-pro"
+    # Anthropic Claude
+    ANTHROPIC_API_KEY: str
+    ANTHROPIC_MODEL: str = "claude-haiku-4-5-20251001"
+    
+    # Voyage AI Embeddings
+    VOYAGE_API_KEY: str
+    VOYAGE_MODEL: str = "voyage-3.5"
     
     # LangSmith (Optional)
     LANGCHAIN_TRACING_V2: bool = False
@@ -29,7 +33,7 @@ class Settings(BaseSettings):
     LANGCHAIN_PROJECT: str = "career-mentor"
     
     # Memory & Vector Store
-    VECTOR_DIMENSION: int = 768
+    VECTOR_DIMENSION: int = 1024  # Voyage embeddings are 1024 dimensions
     MEMORY_SIMILARITY_THRESHOLD: float = 0.7
     
     # Agent
