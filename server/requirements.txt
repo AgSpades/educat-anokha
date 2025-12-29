@@ -1,0 +1,44 @@
+# Core Framework
+fastapi
+uvicorn[standard]
+python-dotenv
+pydantic
+pydantic-settings
+
+# LangChain & LangGraph
+langchain
+langchain-community
+langchain-anthropic
+langgraph
+langchain-postgres
+voyageai
+
+# Database & Vector Store
+psycopg2-binary
+pgvector
+sqlalchemy
+alembic
+
+# Alternative: SQLite + ChromaDB (uncomment if not using Postgres)
+# chromadb
+
+# HTTP & API
+httpx
+aiohttp
+requests
+
+# Data Processing
+numpy
+pandas
+
+# Document Parsing
+PyPDF2
+python-docx
+beautifulsoup4
+lxml
+python-magic
+
+# Utilities
+python-multipart
+python-jose[cryptography]
+passlib[bcrypt]
