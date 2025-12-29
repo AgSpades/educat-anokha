@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  # Career Mentor API
+  api:
+    build: .
+    container_name: career-mentor-api
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/career_mentor_db
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-pro}
+      - ENVIRONMENT=production
+      - DEBUG=False
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - career-mentor-network
+
+  # PostgreSQL Database
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: career-mentor-db
+    environment:
+      - POSTGRES_DB=career_mentor_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - career-mentor-network
+
+volumes:
+  postgres_data:
+
+networks:
+  career-mentor-network:
+    driver: bridge
