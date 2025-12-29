@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
+// import { questions } from '../onboarding-components/OnboardingForm'; // Unused now
 
 interface DashboardOverviewProps {
     darkMode: boolean;
 }
 
 const DashboardOverview: React.FC<DashboardOverviewProps> = ({ darkMode }) => {
-    // Goals State - Moved here since it's only used here
+    // Goals State
     const [dailyGoals, setDailyGoals] = useState([
         { text: "Complete Neural Networks Module", done: false },
         { text: "Review React Hooks Notes", done: true },
         { text: "Practice Python for 30 mins", done: false }
     ]);
+
+    // Preferences State REMOVED
 
     const toggleGoal = (index: number) => {
         const newGoals = [...dailyGoals];
@@ -134,6 +137,8 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({ darkMode }) => {
                         ))}
                     </div>
                 </div>
+
+                {/* REMOVED CAREER PROFILE FROM HERE */}
 
             </div>
         </div>
