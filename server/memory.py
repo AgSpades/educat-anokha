@@ -45,8 +45,13 @@ class MemoryManager:
         Returns:
             Created Memory object
         """
-        # Generate embedding for semantic search
-        embedding = await self.embeddings.aembed_query(content)
+        # Generate embedding for semantic search (with fallback)
+        try:
+            embedding = await self.embeddings.aembed_query(content)
+        except Exception as e:
+            # If embedding fails (e.g., quota), use empty embedding
+            print(f"Warning: Failed to generate embedding: {str(e)[:100]}")
+            embedding = []
         
         memory = Memory(
             id=f"{user_id}_{datetime.utcnow().timestamp()}",
@@ -56,7 +61,7 @@ class MemoryManager:
             embedding=embedding,
             importance=importance,
             tags=tags or [],
-            metadata=metadata or {}
+            meta_data=metadata or {}  # Changed from metadata to meta_data
         )
         
         db.add(memory)
@@ -88,8 +93,18 @@ class MemoryManager:
         Returns:
             List of relevant Memory objects
         """
-        # Generate query embedding
-        query_embedding = await self.embeddings.aembed_query(query)
+        # Generate query embedding (with fallback)
+        try:
+            query_embedding = await self.embeddings.aembed_query(query)
+        except Exception as e:
+            # If embedding fails, return recent memories instead
+            print(f"Warning: Failed to generate query embedding, using recency: {str(e)[:100]}")
+            query_obj = db.query(Memory).filter(Memory.user_id == user_id)
+            if memory_type:
+                query_obj = query_obj.filter(Memory.memory_type == memory_type)
+            if min_importance > 0:
+                query_obj = query_obj.filter(Memory.importance >= min_importance)
+            return query_obj.order_by(Memory.created_at.desc()).limit(top_k).all()
         
         # Get all user memories
         query_obj = db.query(Memory).filter(Memory.user_id == user_id)

@@ -4,9 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from datetime import datetime
 import logging
+import uuid
 
 from config import settings
-from database import init_db, get_db
+from database import init_db, get_db, UserProfile
 from schemas import (
     AgentMessageRequest, AgentMessageResponse,
     RoadmapRegenerateRequest,
@@ -51,6 +52,36 @@ async def startup_event():
     logger.info("Starting Career Mentor API...")
     init_db()
     logger.info("Database initialized")
+
+
+def ensure_user_profile(db: Session, user_id: str) -> UserProfile:
+    """
+    Ensure user profile exists, create if not found.
+    
+    Args:
+        db: Database session
+        user_id: User identifier
+    
+    Returns:
+        UserProfile instance
+    """
+    profile = db.query(UserProfile).filter(
+        UserProfile.user_id == user_id
+    ).first()
+    
+    if not profile:
+        profile = UserProfile(
+            user_id=user_id,
+            skills=[],
+            career_goals=[],
+            target_role=None
+        )
+        db.add(profile)
+        db.commit()
+        db.refresh(profile)
+        logger.info(f"Created new user profile for {user_id}")
+    
+    return profile
 
 
 # Health check
@@ -138,12 +169,15 @@ async def regenerate_roadmap(
 ):
     """Generate a new personalized roadmap."""
     try:
+        # Ensure user profile exists
+        ensure_user_profile(db, request.user_id)
+        
         service = CareerMentorService(db)
         roadmap = await service.regenerate_roadmap(
             user_id=request.user_id,
             target_role=request.target_role,
             focus_areas=request.focus_areas,
-            timeline_weeks=request.timeline_weeks
+            timeline_weeks=request.timeline_weeks or 12
         )
         
         return roadmap
@@ -189,6 +223,9 @@ async def log_application_outcome(
 ):
     """Log job application outcome for learning."""
     try:
+        # Ensure user profile exists
+        ensure_user_profile(db, request.user_id)
+        
         service = CareerMentorService(db)
         app_id = await service.log_application_outcome(
             user_id=request.user_id,

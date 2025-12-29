@@ -35,7 +35,11 @@ class AgentNodes:
         profile = await self.tools.read_user_profile(user_id)
         
         # Get last user message
-        last_message = state["messages"][-1]["content"] if state["messages"] else ""
+        if state["messages"]:
+            last_msg = state["messages"][-1]
+            last_message = last_msg.content if hasattr(last_msg, 'content') else str(last_msg)
+        else:
+            last_message = ""
         
         # Retrieve relevant memories
         relevant_memories = await memory_manager.retrieve_relevant_memories(
@@ -65,7 +69,8 @@ class AgentNodes:
         """
         Analyze user message to determine intent and required actions.
         """
-        last_message = state["messages"][-1]["content"]
+        last_msg = state["messages"][-1]
+        last_message = last_msg.content if hasattr(last_msg, 'content') else str(last_msg)
         
         # Context for intent detection
         context = {
@@ -164,7 +169,8 @@ Respond in JSON:
         """
         Generate final response to user using all available context.
         """
-        user_message = state["messages"][-1]["content"]
+        last_msg = state["messages"][-1]
+        user_message = last_msg.content if hasattr(last_msg, 'content') else str(last_msg)
         
         # Build rich context
         context_parts = [
@@ -209,7 +215,8 @@ Generate your response:"""
         Save this interaction to long-term memory.
         """
         user_id = state["user_id"]
-        user_message = state["messages"][-1]["content"]
+        last_msg = state["messages"][-1]
+        user_message = last_msg.content if hasattr(last_msg, 'content') else str(last_msg)
         agent_response = state.get("response", "")
         
         # Save user message as episodic memory

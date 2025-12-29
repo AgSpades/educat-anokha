@@ -49,7 +49,7 @@ class Memory(Base):
     # Metadata
     importance = Column(Float, default=0.5)  # 0-1 score
     tags = Column(JSON, default=list)
-    metadata = Column(JSON, default=dict)
+    meta_data = Column(JSON, default=dict)  # Renamed from metadata to avoid SQLAlchemy conflict
     
     user = relationship("UserProfile", back_populates="memories")
 

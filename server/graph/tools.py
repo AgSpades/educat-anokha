@@ -113,6 +113,10 @@ class CareerMentorTools:
                 "rest api", "databases", "authentication", "caching",
                 "microservices", "docker", "kubernetes"
             ],
+            "backend engineer": [  # Added alias
+                "rest api", "databases", "authentication", "caching",
+                "microservices", "docker", "kubernetes"
+            ],
             "fullstack developer": [
                 "react", "node.js", "databases", "rest api",
                 "docker", "ci/cd", "system design"
@@ -132,6 +136,13 @@ class CareerMentorTools:
         }
         
         required = role_requirements.get(target_role.lower(), [])
+        # If no exact match, try to find similar roles
+        if not required:
+            for key in role_requirements:
+                if key in target_role.lower() or target_role.lower() in key:
+                    required = role_requirements[key]
+                    break
+        
         gaps = [skill for skill in required if skill not in current_skills]
         
         return gaps

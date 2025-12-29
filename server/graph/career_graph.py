@@ -3,7 +3,8 @@ from typing import Dict, Any, Optional
 from datetime import datetime
 
 from langgraph.graph import StateGraph, END
-from langgraph.checkpoint.sqlite import SqliteSaver
+from langgraph.checkpoint.memory import MemorySaver
+from langchain_core.messages import HumanMessage
 from sqlalchemy.orm import Session
 
 from graph.state import AgentState
@@ -53,7 +54,7 @@ class CareerMentorGraph:
         
         # Compile with checkpointing
         if settings.CHECKPOINT_ENABLED:
-            checkpointer = SqliteSaver.from_conn_string(":memory:")
+            checkpointer = MemorySaver()
             return workflow.compile(checkpointer=checkpointer)
         
         return workflow.compile()
@@ -83,7 +84,7 @@ class CareerMentorGraph:
         """
         # Initialize state
         initial_state: AgentState = {
-            "messages": [{"role": "user", "content": message}],
+            "messages": [HumanMessage(content=message)],
             "user_id": user_id,
             "current_skills": [],
             "target_role": None,

@@ -18,7 +18,7 @@ A production-ready, stateful AI career mentor backend built with **FastAPI** and
 
 - **LangGraph** for stateful agent orchestration with checkpointing
 - **Google Gemini** (Pro/Flash) for LLM capabilities
-- **PostgreSQL + pgvector** OR **SQLite + ChromaDB** for persistence
+- **PostgreSQL + pgvector** for persistence
 - **Semantic search** via embeddings for memory retrieval
 - **Production-ready**: Type hints, logging, error handling, CORS
 
