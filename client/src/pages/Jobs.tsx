@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useThemeContext } from '../contexts/ThemeContext';
 import BackgroundGradients from '../landing-page-components/BackgroundGradients';
 import { Link } from 'react-router-dom';
+import Jobs3DVisual from '../jobs-components/Jobs3DVisual';
 
 interface Job {
     id: string;
@@ -17,7 +18,7 @@ interface Job {
 }
 
 const Jobs: React.FC = () => {
-    const { darkMode } = useThemeContext();
+    const { darkMode, toggleTheme } = useThemeContext();
     const [filter, setFilter] = useState('Recommended');
 
     const jobsData: Record<string, Job[]> = {
@@ -188,21 +189,45 @@ const Jobs: React.FC = () => {
                         </div>
                         <span className="font-semibold text-sm">Back to Profile</span>
                     </Link>
+
                     <div className="text-xl font-bold tracking-tight">
                         Recommended <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">Jobs</span>
                     </div>
-                    <div className="w-8"></div> {/* Spacer for center alignment */}
+
+                    <button
+                        onClick={toggleTheme}
+                        className={`p-2 rounded-full transition-all duration-300 ${darkMode ? 'bg-zinc-800 text-yellow-400 hover:bg-zinc-700' : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'}`}
+                    >
+                        {darkMode ? (
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                        ) : (
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+                        )}
+                    </button>
                 </div>
             </nav>
 
             <main className="flex-1 w-full max-w-5xl mx-auto px-4 md:px-6 py-24 md:py-28 relative z-10">
 
-                {/* Header Section */}
-                <div className="text-center mb-12 animate-fade-in-up">
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4">Finding your dream role</h1>
-                    <p className={`text-lg max-w-2xl mx-auto ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                        Based on your roadmap progress and skills, here are the top opportunities currated just for you.
-                    </p>
+
+
+                {/* Header Section with 3D Visual */}
+                <div className="flex flex-col md:flex-row items-center justify-between mb-16 gap-10">
+                    <div className="text-left md:w-1/2 animate-fade-in-up">
+                        <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight">
+                            Find your next <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+                                Breakthrough Role
+                            </span>
+                        </h1>
+                        <p className={`text-lg max-w-xl leading-relaxed ${darkMode ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                            AI-powered matching based on your unique skill profile. We've curated these opportunities just for you.
+                        </p>
+                    </div>
+
+                    <div className="w-full md:w-1/2 h-[400px] flex items-center justify-center animate-fade-in">
+                        <Jobs3DVisual darkMode={darkMode} />
+                    </div>
                 </div>
 
                 {/* Filters */}

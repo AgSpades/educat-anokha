@@ -219,6 +219,10 @@ input {
     animation: float 6s ease-in-out infinite;
 }
 
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
 .animate-float-delayed {
     animation: floatDelayed 7s ease-in-out infinite 2s;
 }
@@ -246,4 +250,45 @@ input {
 
 .animate-spin-reverse {
     animation: spinReverse 10s linear infinite;
+}
+
+/* New Animations for Jobs 3D Visual */
+.perspective-1000 {
+    perspective: 1000px;
+}
+
+.transform-style-3d {
+    transform-style: preserve-3d;
+}
+
+.animate-spin-slow-reverse {
+    animation: spinReverse 15s linear infinite;
+}
+
+@keyframes counterSpinClockwise {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes counterSpinCounterClockwise {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+.animate-counter-spin {
+    animation: counterSpinClockwise 15s linear infinite;
+}
+
+.animate-counter-spin-fast {
+    animation: counterSpinCounterClockwise 8s linear infinite;
 }
