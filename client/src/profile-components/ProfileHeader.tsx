@@ -12,29 +12,29 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ darkMode, name, photo, ge
     return (
         <div className="mb-12 flex flex-col lg:flex-row items-center lg:items-center justify-between gap-10">
             {/* Left Column: Text & Stats */}
-            <div className="w-full lg:w-1/2 space-y-8 animate-fade-in-up">
-                <div>
+            <div className="w-full lg:w-1/2 space-y-8 animate-fade-in-up flex flex-col items-center lg:items-center">
+                <div className="text-center">
                     <h1 className={`text-3xl md:text-5xl font-bold mb-3 tracking-tight ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
                         Welcome back, <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-600">
                             {name}
                         </span>
                     </h1>
-                    <p className={`text-lg ${darkMode ? 'text-zinc-400' : 'text-zinc-600'} max-w-md`}>
+                    <p className={`text-lg ${darkMode ? 'text-zinc-400' : 'text-zinc-600'} max-w-md mx-auto`}>
                         Your learning journey is on track. You're currently mastering AI & Machine Learning.
                     </p>
                 </div>
 
-                <div className="flex flex-wrap gap-4">
-                    <div className={`flex-1 min-w-[140px] px-6 py-4 rounded-2xl border transition-transform hover:scale-105 ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'} backdrop-blur-sm shadow-sm`}>
+                <div className="flex flex-wrap justify-center gap-4 w-full">
+                    <div className={`flex-1 min-w-[140px] px-6 py-4 rounded-2xl border transition-transform hover:scale-105 ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'} backdrop-blur-sm shadow-sm flex flex-col items-center`}>
                         <div className={`text-3xl font-bold ${darkMode ? 'text-white' : 'text-zinc-900'}`}>12</div>
                         <div className={`text-xs uppercase tracking-wider font-semibold mt-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>Hours Learned</div>
                     </div>
-                    <div className={`flex-1 min-w-[140px] px-6 py-4 rounded-2xl border transition-transform hover:scale-105 ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'} backdrop-blur-sm shadow-sm`}>
+                    <div className={`flex-1 min-w-[140px] px-6 py-4 rounded-2xl border transition-transform hover:scale-105 ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'} backdrop-blur-sm shadow-sm flex flex-col items-center`}>
                         <div className={`text-3xl font-bold ${darkMode ? 'text-white' : 'text-zinc-900'}`}>2</div>
                         <div className={`text-xs uppercase tracking-wider font-semibold mt-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>Certificates</div>
                     </div>
-                    <div className={`flex-1 min-w-[140px] px-6 py-4 rounded-2xl border transition-transform hover:scale-105 ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'} backdrop-blur-sm shadow-sm`}>
+                    <div className={`flex-1 min-w-[140px] px-6 py-4 rounded-2xl border transition-transform hover:scale-105 ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'} backdrop-blur-sm shadow-sm flex flex-col items-center`}>
                         <div className={`text-3xl font-bold ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>Top 5%</div>
                         <div className={`text-xs uppercase tracking-wider font-semibold mt-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>Class Rank</div>
                     </div>

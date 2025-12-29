@@ -62,9 +62,6 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({ darkMode }) => {
                             <button className={`px-6 py-2.5 rounded-lg font-semibold text-white transition-all hover:bg-indigo-700 active:scale-95 bg-indigo-600 shadow-sm`}>
                                 Continue Learning
                             </button>
-                            <a href="/roadmap" className={`px-6 py-2.5 rounded-lg font-semibold border transition-all active:scale-95 flex items-center justify-center gap-2 ${darkMode ? 'border-zinc-700 hover:bg-zinc-800 text-white' : 'border-zinc-200 hover:bg-zinc-50 text-zinc-700'}`}>
-                                View Roadmap
-                            </a>
                         </div>
                     </div>
                 </div>
