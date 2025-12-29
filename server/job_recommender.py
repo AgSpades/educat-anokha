@@ -3,12 +3,16 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
 import numpy as np
 from sqlalchemy.orm import Session
+import requests
+import logging
 
 from langchain_anthropic import ChatAnthropic
 import voyageai
 
 from database import UserProfile, Application
 from config import settings
+
+logger = logging.getLogger(__name__)
 
 
 class JobRecommendationEngine:
@@ -134,11 +138,123 @@ Return ONLY the JSON object."""
             "analysis_date": datetime.utcnow().isoformat()
         }
     
+    def _search_jsearch_jobs(
+        self,
+        query: str,
+        location: str = "Remote",
+        limit: int = 10,
+        employment_type: str = "FULLTIME"
+    ) -> List[Dict[str, Any]]:
+        """
+        Search real jobs using JSearch API (RapidAPI).
+        
+        Args:
+            query: Search query (job title, skills)
+            location: Job location
+            limit: Maximum results
+            employment_type: FULLTIME, PARTTIME, CONTRACTOR, INTERN
+        
+        Returns:
+            List of real job postings with apply URLs
+        """
+        if not settings.JSEARCH_API_KEY:
+            logger.warning("JSearch API key not configured, using AI-generated jobs")
+            return []
+        
+        try:
+            url = "https://jsearch.p.rapidapi.com/search"
+            
+            headers = {
+                "X-RapidAPI-Key": settings.JSEARCH_API_KEY,
+                "X-RapidAPI-Host": settings.JSEARCH_API_HOST
+            }
+            
+            params = {
+                "query": query if not location else f"{query} {location}",  # Simpler format
+                "page": "1",
+                "num_pages": "1",
+                "country":"in",
+            }
+            
+            response = requests.get(url, headers=headers, params=params, timeout=10)
+            response.raise_for_status()
+            
+            data = response.json()
+            jobs = data.get('data', [])
+            
+            # Transform to our format
+            formatted_jobs = []
+            for job in jobs[:limit]:
+                formatted_jobs.append({
+                    "company": job.get('employer_name', 'Unknown Company'),
+                    "title": job.get('job_title', 'Unknown Title'),
+                    "location": job.get('job_city', location) if job.get('job_city') else location,
+                    "job_type": job.get('job_employment_type', 'Full-time'),
+                    "experience_required": job.get('job_required_experience', {}).get('required_experience_in_months', 0) // 12 if job.get('job_required_experience') else 0,
+                    "required_skills": job.get('job_required_skills', []),
+                    "preferred_skills": [],
+                    "salary_range": {
+                        "min": job.get('job_min_salary'),
+                        "max": job.get('job_max_salary'),
+                        "currency": job.get('job_salary_currency', 'USD')
+                    } if job.get('job_min_salary') else None,
+                    "description": job.get('job_description', '')[:500],  # First 500 chars
+                    "url": job.get('job_apply_link', job.get('job_google_link', '')),
+                    "match_score": 0,  # Will be calculated with embeddings
+                    "posted_date": job.get('job_posted_at_datetime_utc', datetime.utcnow().isoformat()),
+                    "source": "JSearch API",
+                    "logo": job.get('employer_logo')
+                })
+            
+            logger.info(f"Fetched {len(formatted_jobs)} real jobs from JSearch API")
+            return formatted_jobs
+        
+        except Exception as e:
+            logger.error(f"JSearch API error: {str(e)}")
+            return []
+    
+    def _calculate_semantic_match(
+        self,
+        user_profile: str,
+        job_description: str
+    ) -> float:
+        """
+        Calculate semantic similarity using Voyage AI embeddings.
+        
+        Args:
+            user_profile: User skills and experience as text
+            job_description: Job description
+        
+        Returns:
+            Match score 0-100
+        """
+        try:
+            # Get embeddings
+            embeddings = self.voyage_client.embed(
+                [user_profile, job_description],
+                model=settings.VOYAGE_MODEL,
+                input_type="document"
+            ).embeddings
+            
+            # Calculate cosine similarity
+            user_vec = np.array(embeddings[0])
+            job_vec = np.array(embeddings[1])
+            
+            similarity = np.dot(user_vec, job_vec) / (np.linalg.norm(user_vec) * np.linalg.norm(job_vec))
+            
+            # Convert to 0-100 score
+            return round(float(similarity) * 100, 2)
+        
+        except Exception as e:
+            logger.error(f"Semantic matching error: {str(e)}")
+            return 50.0  # Default neutral score
+    
     async def recommend_jobs(
         self,
         db: Session,
         user_id: str,
-        limit: int = 10
+        limit: int = 10,
+        use_real_jobs: bool = True
     ) -> List[Dict[str, Any]]:
         """
         Recommend jobs based on user profile.
@@ -147,9 +263,10 @@ Return ONLY the JSON object."""
             db: Database session
             user_id: User identifier
             limit: Maximum recommendations
+            use_real_jobs: If True, fetch from JSearch API; if False, use AI-generated
         
         Returns:
-            List of recommended jobs
+            List of recommended jobs with semantic match scores
         """
         # Get user profile
         profile = db.query(UserProfile).filter(
@@ -165,7 +282,47 @@ Return ONLY the JSON object."""
         exp_val = profile.experience_years
         experience = float(exp_val) if exp_val is not None else 0.0  # type: ignore
         
-        # Generate job recommendations using LLM
+        # Build user profile text for semantic matching
+        user_profile_text = f"""Role: {target_role}
+Skills: {', '.join(user_skills)}
+Experience: {experience} years"""
+        
+        # Try to fetch real jobs from JSearch API
+        jobs = []
+        if use_real_jobs and settings.JSEARCH_API_KEY:
+            logger.info(f"Fetching real jobs from JSearch API for user {user_id}")
+            # Simplify query - JSearch works better with simple queries
+            search_query = target_role  # Just use target role, not all skills
+            logger.info(f"Search query: {search_query}")
+            
+            jobs = self._search_jsearch_jobs(search_query, location="", limit=limit * 2)  # Empty location = broader search
+            logger.info(f"Fetched {len(jobs)} jobs from JSearch API")
+            
+            if jobs:
+                # Calculate semantic match scores for real jobs
+                logger.info("Calculating semantic match scores...")
+                for job in jobs:
+                    try:
+                        job_text = f"{job['title']} - {job['description']}"
+                        job['match_score'] = self._calculate_semantic_match(user_profile_text, job_text)
+                        job['recommendation_reason'] = self._generate_reason(job, user_skills)
+                    except Exception as e:
+                        logger.warning(f"Error calculating match score: {str(e)}, using default")
+                        job['match_score'] = 60.0  # Default score if semantic matching fails
+                        job['recommendation_reason'] = f"Relevant to {target_role}"
+                
+                # Sort by match score and limit
+                jobs = sorted(jobs, key=lambda x: x['match_score'], reverse=True)[:limit]
+                
+                logger.info(f"Returning {len(jobs)} real jobs with semantic matching")
+                for job in jobs:
+                    job['recommended_at'] = datetime.utcnow().isoformat()
+                return jobs
+            else:
+                logger.warning("JSearch API returned no jobs, falling back to AI-generated")
+        
+        # Fallback to AI-generated jobs if API unavailable or disabled
+        logger.info("Using AI-generated jobs (JSearch API not available)")
         prompt = f"""Generate {limit} realistic job postings for a candidate with this profile:
 
 Role Interest: {target_role}
