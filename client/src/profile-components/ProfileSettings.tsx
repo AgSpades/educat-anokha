@@ -1,5 +1,7 @@
 import { questions } from '../onboarding-components/OnboardingForm';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 interface ProfileSettingsProps {
     darkMode: boolean;
@@ -25,6 +27,8 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
     resumeName, setResumeName,
     getInitials
 }) => {
+    const { logout } = useAuth();
+    const navigate = useNavigate();
     const [isSaving, setIsSaving] = useState(false);
 
     // Preferences State
@@ -42,14 +46,6 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
             item.id === id ? { ...item, answer: value } : item
         );
         setPreferenceData(newData);
-
-        // We'll save to local storage when the user hits the main "Save Changes" button,
-        // OR we can save immediately. Since this is a settings page, typically you save on "Save".
-        // However, to keep it consistent with DashboardOverview previous behavior (which saved immediately), 
-        // let's update state here and we can decide whether to persist comfortably.
-        // For now, let's persist immediately for better UX as they tweak things,
-        // OR wait for the save button. The user request implies moving it to settings.
-        // Let's hook it into handleSave properly.
     };
 
     const handleSave = () => {
@@ -71,6 +67,15 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
             setIsSaving(false);
             alert('Profile updated successfully!');
         }, 1000);
+    };
+
+    const handleLogout = async () => {
+        try {
+            await logout();
+            navigate('/login');
+        } catch (error) {
+            console.error("Logout failed", error);
+        }
     };
 
     const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -199,6 +204,25 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
                                 </div>
                             )}
                         </div>
+                    </div>
+                </div>
+
+                {/* Account Actions */}
+                <div className={`mt-12 pt-8 border-t ${darkMode ? 'border-zinc-800' : 'border-zinc-200'}`}>
+                    <h3 className={`text-sm font-bold uppercase tracking-wider mb-4 ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>Account Actions</h3>
+                    <div className={`flex items-center justify-between p-4 rounded-xl border transition-all ${darkMode ? 'border-zinc-800 bg-zinc-900/30' : 'border-zinc-200 bg-zinc-50/50'}`}>
+                        <div>
+                            <div className={`font-medium ${darkMode ? 'text-zinc-200' : 'text-zinc-900'}`}>Sign out</div>
+                            <div className={`text-sm ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>Securely log out of your account on this device.</div>
+                        </div>
+                        <button
+                            onClick={handleLogout}
+                            className={`px-5 py-2.5 text-sm font-semibold rounded-xl border transition-all duration-300 ${darkMode
+                                ? 'border-zinc-700 hover:border-zinc-600 hover:bg-zinc-800 text-zinc-300 hover:text-white'
+                                : 'border-zinc-200 hover:border-zinc-300 hover:bg-white text-zinc-600 hover:text-zinc-900 hover:shadow-sm'}`}
+                        >
+                            Log Out
+                        </button>
                     </div>
                 </div>
             </div>
