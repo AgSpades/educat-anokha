@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+import { parseResume } from '../../services/agentService';
 // import { questions } from '../onboarding-components/OnboardingForm'; // Unused now
 
 interface DashboardOverviewProps {
@@ -9,6 +11,7 @@ interface DashboardOverviewProps {
 }
 
 const DashboardOverview: React.FC<DashboardOverviewProps> = ({ darkMode, resumeName, setResumeName }) => {
+    const { user } = useAuth();
 
     return (
         <div className="animate-fade-in-up space-y-12 relative">
@@ -44,9 +47,22 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({ darkMode, resumeN
                             type="file"
                             className="hidden"
                             accept=".pdf,.doc,.docx"
-                            onChange={(e) => {
+                            onChange={async (e) => {
                                 if (e.target.files && e.target.files[0]) {
-                                    setResumeName(e.target.files[0].name);
+                                    const file = e.target.files[0];
+                                    setResumeName(file.name);
+
+                                    if (user && user.$id) {
+                                        try {
+                                            console.log("Uploading and parsing resume...");
+                                            const parsedData = await parseResume(user.$id, file);
+                                            console.log("Parsed Resume Data:", parsedData);
+                                        } catch (error) {
+                                            console.error("Error parsing resume:", error);
+                                        }
+                                    } else {
+                                        console.warn("User ID not available, skipping resume parsing.");
+                                    }
                                 }
                             }}
                         />

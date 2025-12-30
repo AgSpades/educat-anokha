@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useThemeContext } from '../contexts/ThemeContext';
+import { useAuth } from '../contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import BackgroundGradients from '../components/landing-page-components/BackgroundGradients';
+import Assistant3DCard from '../components/chat-components/Assistant3DCard';
+import { sendMessageToAgent } from '../services/agentService';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Message {
     id: string;
@@ -12,6 +17,7 @@ interface Message {
 
 const Chat: React.FC = () => {
     const { darkMode } = useThemeContext();
+    const { user } = useAuth();
     const [messages, setMessages] = useState<Message[]>([
         {
             id: '1',
@@ -46,17 +52,31 @@ const Chat: React.FC = () => {
         setInputValue('');
         setIsTyping(true);
 
-        // Simulate AI response
-        setTimeout(() => {
+        try {
+            if (!user?.$id) {
+                throw new Error("User ID not found");
+            }
+            const aiText = await sendMessageToAgent(user.$id, userMessage.text);
+
             const aiMessage: Message = {
                 id: (Date.now() + 1).toString(),
-                text: 'That sounds like a great goal! Based on your profile, I recommend focusing on advanced Python concepts and looking into the "Senior AI Engineer" role I found for you.',
+                text: aiText,
                 sender: 'ai',
                 timestamp: new Date()
             };
             setMessages(prev => [...prev, aiMessage]);
+        } catch (error) {
+            console.error('Error sending message:', error);
+            const errorMessage: Message = {
+                id: (Date.now() + 1).toString(),
+                text: "Sorry, I'm having trouble connecting to the server right now. Please check your connection and try again.",
+                sender: 'ai',
+                timestamp: new Date()
+            };
+            setMessages(prev => [...prev, errorMessage]);
+        } finally {
             setIsTyping(false);
-        }, 1500);
+        }
     };
 
     const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -114,6 +134,11 @@ const Chat: React.FC = () => {
             {/* Chat Area - Scrollable */}
             <div className="flex-1 overflow-y-auto relative z-10 scroll-smooth">
                 <div className="max-w-4xl mx-auto px-4 py-8 space-y-8 min-h-full">
+                    {/* 3D Assistant Card */}
+                    <div className="mt-4 mb-8">
+                        <Assistant3DCard />
+                    </div>
+
                     {/* Welcome/Date Separator */}
                     <div className="flex justify-center">
                         <span className={`text-xs font-medium px-3 py-1 rounded-full ${darkMode ? 'bg-zinc-900 text-zinc-500' : 'bg-zinc-100 text-zinc-500'}`}>
@@ -146,7 +171,43 @@ const Chat: React.FC = () => {
                                         ? 'bg-zinc-800/80 border border-white/5 text-zinc-200 backdrop-blur-md rounded-tl-sm'
                                         : 'bg-white border border-zinc-100 text-zinc-800 rounded-tl-sm shadow-zinc-200/50'
                                     }`}>
-                                    {message.text}
+                                    <ReactMarkdown
+                                        remarkPlugins={[remarkGfm]}
+                                        components={{
+                                            p: ({ children }: any) => <p className="mb-2 last:mb-0">{children}</p>,
+                                            ul: ({ children }: any) => <ul className="list-disc ml-4 mb-2">{children}</ul>,
+                                            ol: ({ children }: any) => <ol className="list-decimal ml-4 mb-2">{children}</ol>,
+                                            li: ({ children }: any) => <li className="mb-1">{children}</li>,
+                                            a: ({ href, children }: any) => (
+                                                <a href={href} target="_blank" rel="noopener noreferrer" className={`underline underline-offset-2 ${message.sender === 'user' ? 'text-white' : 'text-indigo-500 hover:text-indigo-400'}`}>
+                                                    {children}
+                                                </a>
+                                            ),
+                                            h1: ({ children }: any) => <h1 className="text-lg font-bold mb-2 mt-4 first:mt-0">{children}</h1>,
+                                            h2: ({ children }: any) => <h2 className="text-base font-bold mb-2 mt-4 first:mt-0">{children}</h2>,
+                                            h3: ({ children }: any) => <h3 className="text-sm font-bold mb-2 mt-4 first:mt-0">{children}</h3>,
+                                            blockquote: ({ children }: any) => <blockquote className={`border-l-4 pl-3 italic mb-2 ${message.sender === 'user' ? 'border-indigo-400' : 'border-zinc-300 dark:border-zinc-600'}`}>{children}</blockquote>,
+                                            code: ({ children, className }: any) => {
+                                                // Basic check for inline code vs block code could be done here if needed
+                                                // But for simplicity, we treat them similarly unless it's a pre block
+                                                const isInline = !className;
+                                                return (
+                                                    <code className={`${isInline
+                                                        ? (message.sender === 'user' ? 'bg-indigo-800/50 text-white' : 'bg-zinc-200 dark:bg-zinc-700 text-indigo-600 dark:text-indigo-300')
+                                                        : ''} rounded px-1.5 py-0.5 text-xs font-mono break-all`}>
+                                                        {children}
+                                                    </code>
+                                                );
+                                            },
+                                            pre: ({ children }: any) => (
+                                                <pre className={`p-3 rounded-lg overflow-x-auto mb-3 text-sm font-mono ${message.sender === 'user' ? 'bg-indigo-900/50 text-zinc-100' : 'bg-zinc-100 dark:bg-zinc-900/80 text-zinc-800 dark:text-zinc-300'}`}>
+                                                    {children}
+                                                </pre>
+                                            ),
+                                        }}
+                                    >
+                                        {message.text}
+                                    </ReactMarkdown>
                                 </div>
                             </div>
                         </div>
