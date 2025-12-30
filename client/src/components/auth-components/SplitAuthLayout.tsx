@@ -54,7 +54,7 @@ const SplitAuthLayout: React.FC<SplitAuthLayoutProps> = ({ children, variant = '
 
                     {/* Footer */}
                     <div className={`mt-8 text-center text-xs ${darkMode ? 'text-zinc-600' : 'text-zinc-400'}`}>
-                        © 2025 Educat-AI Inc.
+                        &copy;{new Date().getFullYear()} EducatAI
                     </div>
                 </div>
             </div>
