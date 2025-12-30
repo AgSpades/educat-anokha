@@ -88,3 +88,24 @@ export const recommendJobs = async (userId: string, limit: number = 5): Promise<
 
     return await response.json();
 };
+
+export const getLearningResources = async (skill: string, level: string = 'Beginner', resourceTypes: string[] = ['course', 'tutorial', 'video', 'project']): Promise<any> => {
+    const response = await fetch('http://localhost:8000/agent/resources/learning', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            skill: skill,
+            level: level,
+            resource_types: resourceTypes
+        }),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(`Failed to get learning resources: ${response.status} ${response.statusText} - ${errorData}`);
+    }
+
+    return await response.json();
+};
