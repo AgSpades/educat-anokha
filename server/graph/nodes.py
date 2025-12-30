@@ -37,7 +37,12 @@ class AgentNodes:
         # Get last user message
         if state["messages"]:
             last_msg = state["messages"][-1]
-            last_message = last_msg.content if hasattr(last_msg, 'content') else str(last_msg)
+            if isinstance(last_msg, dict):
+                last_message = last_msg.get('content', str(last_msg))
+            elif hasattr(last_msg, 'content'):
+                last_message = last_msg.content
+            else:
+                last_message = str(last_msg)
         else:
             last_message = ""
         
@@ -70,7 +75,12 @@ class AgentNodes:
         Analyze user message to determine intent and required actions.
         """
         last_msg = state["messages"][-1]
-        last_message = last_msg.content if hasattr(last_msg, 'content') else str(last_msg)
+        if isinstance(last_msg, dict):
+            last_message = last_msg.get('content', str(last_msg))
+        elif hasattr(last_msg, 'content'):
+            last_message = last_msg.content
+        else:
+            last_message = str(last_msg)
         
         # Context for intent detection
         context = {
@@ -170,7 +180,12 @@ Respond in JSON:
         Generate final response to user using all available context.
         """
         last_msg = state["messages"][-1]
-        user_message = last_msg.content if hasattr(last_msg, 'content') else str(last_msg)
+        if isinstance(last_msg, dict):
+            user_message = last_msg.get('content', str(last_msg))
+        elif hasattr(last_msg, 'content'):
+            user_message = last_msg.content
+        else:
+            user_message = str(last_msg)
         
         # Build rich context
         context_parts = [
@@ -216,7 +231,14 @@ Generate your response:"""
         """
         user_id = state["user_id"]
         last_msg = state["messages"][-1]
-        user_message = last_msg.content if hasattr(last_msg, 'content') else str(last_msg)
+        
+        if isinstance(last_msg, dict):
+            user_message = last_msg.get('content', str(last_msg))
+        elif hasattr(last_msg, 'content'):
+            user_message = last_msg.content
+        else:
+            user_message = str(last_msg)
+            
         agent_response = state.get("response", "")
         
         # Save user message as episodic memory
