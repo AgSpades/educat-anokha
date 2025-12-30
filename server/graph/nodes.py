@@ -3,7 +3,7 @@ from typing import Dict, Any
 from datetime import datetime
 import json
 
-from langchain_anthropic import ChatAnthropic
+from langchain_google_genai import ChatGoogleGenerativeAI
 from sqlalchemy.orm import Session
 
 from graph.state import AgentState
@@ -18,9 +18,9 @@ class AgentNodes:
     def __init__(self, db: Session):
         self.db = db
         self.tools = CareerMentorTools(db)
-        self.llm = ChatAnthropic(
-            model=settings.ANTHROPIC_MODEL,
-            anthropic_api_key=settings.ANTHROPIC_API_KEY,
+        self.llm = ChatGoogleGenerativeAI(
+            model=settings.GEMINI_MODEL,
+            google_api_key=settings.GOOGLE_API_KEY,
             temperature=0.7
         )
     

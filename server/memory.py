@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import json
 import numpy as np
 from sqlalchemy.orm import Session
-import voyageai
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 from database import Memory, UserProfile
 from config import settings
@@ -15,7 +15,10 @@ class MemoryManager:
     
     def __init__(self):
         """Initialize memory manager with embeddings."""
-        self.voyage_client = voyageai.Client(api_key=settings.VOYAGE_API_KEY)
+        self.embedding_client = GoogleGenerativeAIEmbeddings(
+            model=settings.GEMINI_EMBEDDING_MODEL,
+            google_api_key=settings.GOOGLE_API_KEY
+        )
     
     async def add_memory(
         self,
@@ -44,12 +47,8 @@ class MemoryManager:
         """
         # Generate embedding for semantic search (with fallback)
         try:
-            result = self.voyage_client.embed(
-                [content], 
-                model=settings.VOYAGE_MODEL, 
-                input_type="document"
-            )
-            embedding = result.embeddings[0]
+            # LangChain's Google embeddings return a list of floats
+            embedding = self.embedding_client.embed_query(content)
         except Exception as e:
             # If embedding fails (e.g., quota), use empty embedding
             print(f"Warning: Failed to generate embedding: {str(e)[:100]}")
@@ -97,12 +96,7 @@ class MemoryManager:
         """
         # Generate query embedding (with fallback)
         try:
-            result = self.voyage_client.embed(
-                [query], 
-                model=settings.VOYAGE_MODEL, 
-                input_type="query"
-            )
-            query_embedding = result.embeddings[0]
+            query_embedding = self.embedding_client.embed_query(query)
         except Exception as e:
             # If embedding fails, return recent memories instead
             print(f"Warning: Failed to generate query embedding, using recency: {str(e)[:100]}")
