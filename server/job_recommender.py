@@ -6,7 +6,8 @@ from sqlalchemy.orm import Session
 import requests
 import logging
 
-from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+from langchain_groq import ChatGroq
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 from database import UserProfile, Application
 from config import settings
@@ -18,10 +19,10 @@ class JobRecommendationEngine:
     """Match users to jobs and analyze market trends."""
     
     def __init__(self):
-        self.llm = ChatGoogleGenerativeAI(
-            model=settings.GEMINI_MODEL,
-            google_api_key=settings.GOOGLE_API_KEY,
-            temperature=0.5
+        self.llm = ChatGroq(
+            model_name=settings.GROQ_MODEL,
+            api_key=settings.GROQ_API_KEY,
+            temperature=0
         )
         self.embedding_client = GoogleGenerativeAIEmbeddings(
             model=settings.GEMINI_EMBEDDING_MODEL,

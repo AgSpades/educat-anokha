@@ -19,10 +19,14 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = "sqlite:///./career_mentor.db"
     
-    # Google Gemini
+    # Google Gemini (Legacy / Embeddings)
     GOOGLE_API_KEY: str
-    GEMINI_MODEL: str = "gemini-flash-lite-latest"
+    GEMINI_MODEL: str = "gemini-pro"
     GEMINI_EMBEDDING_MODEL: str = "models/text-embedding-004"
+    
+    # Groq (Main LLM)
+    GROQ_API_KEY: str = ""
+    GROQ_MODEL: str = "llama-3.3-70b-versatile"
     
     # JSearch API (RapidAPI)
     JSEARCH_API_KEY: str = ""

@@ -14,7 +14,7 @@ try:
 except ImportError:
     Document = None
 
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 from config import settings
 
 
@@ -22,9 +22,9 @@ class ResumeParser:
     """Extract structured information from resumes."""
     
     def __init__(self):
-        self.llm = ChatGoogleGenerativeAI(
-            model=settings.GEMINI_MODEL,
-            google_api_key=settings.GOOGLE_API_KEY,
+        self.llm = ChatGroq(
+            model_name=settings.GROQ_MODEL,
+            api_key=settings.GROQ_API_KEY,
             temperature=0
         )
     

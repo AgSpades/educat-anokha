@@ -328,23 +328,17 @@ async def parse_resume(
         # Update user profile with extracted skills
         profile = db.query(UserProfile).filter(UserProfile.user_id == user_id).first()
         if profile and parsed_data.get('skills'):
-            # Get current skills as a Python list
-            current_skills_list = profile.skills if profile.skills else []  # type: ignore
-            if not isinstance(current_skills_list, list):
-                current_skills_list = []
-            
-            existing_skills = {s['name'] if isinstance(s, dict) else str(s) for s in current_skills_list}
-            new_skills = [
+            # Overwrite skills with new data from resume
+            # This ensures we don't accumulate stale skills from previous uploads
+            new_skills_list = [
                 {"name": skill, "level": "intermediate", "verified": True}
                 for skill in parsed_data['skills']
-                if skill not in existing_skills
             ]
-            if new_skills:
-                updated_skills = current_skills_list + new_skills
-                db.query(UserProfile).filter(UserProfile.user_id == user_id).update(
-                    {"skills": updated_skills},
-                    synchronize_session=False
-                )
+            
+            db.query(UserProfile).filter(UserProfile.user_id == user_id).update(
+                {"skills": new_skills_list},
+                synchronize_session=False
+            )
             db.commit()
         
         logger.info(f"Successfully parsed resume for user {user_id}")
