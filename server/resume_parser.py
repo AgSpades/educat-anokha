@@ -14,7 +14,7 @@ try:
 except ImportError:
     Document = None
 
-from langchain_anthropic import ChatAnthropic
+from langchain_google_genai import ChatGoogleGenerativeAI
 from config import settings
 
 
@@ -22,9 +22,9 @@ class ResumeParser:
     """Extract structured information from resumes."""
     
     def __init__(self):
-        self.llm = ChatAnthropic(
-            model_name=settings.ANTHROPIC_MODEL,
-            api_key=settings.ANTHROPIC_API_KEY,
+        self.llm = ChatGoogleGenerativeAI(
+            model=settings.GEMINI_MODEL,
+            google_api_key=settings.GOOGLE_API_KEY,
             temperature=0
         )
     
