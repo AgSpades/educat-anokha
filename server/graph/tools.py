@@ -5,7 +5,7 @@ import json
 from sqlalchemy.orm import Session
 
 from langchain.tools import tool
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_groq import ChatGroq
 
 from database import UserProfile, Milestone, Application, Roadmap
 from memory import memory_manager
@@ -17,9 +17,9 @@ class CareerMentorTools:
     
     def __init__(self, db: Session):
         self.db = db
-        self.llm = ChatGoogleGenerativeAI(
-            model=settings.GEMINI_MODEL,
-            google_api_key=settings.GOOGLE_API_KEY,
+        self.llm = ChatGroq(
+            model_name=settings.GROQ_MODEL,
+            api_key=settings.GROQ_API_KEY,
             temperature=0.7
         )
     

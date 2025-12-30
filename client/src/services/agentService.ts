@@ -109,3 +109,40 @@ export const getLearningResources = async (skill: string, level: string = 'Begin
 
     return await response.json();
 };
+
+export const getCurrentRoadmap = async (userId: string): Promise<any> => {
+    const response = await fetch(`http://localhost:8000/agent/roadmap/current?user_id=${userId}`);
+
+    if (response.status === 404) {
+        return { roadmap: [] }; // Return empty structure for new users
+    }
+
+    if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(`Failed to get current roadmap: ${response.status} ${response.statusText} - ${errorData}`);
+    }
+
+    return await response.json();
+};
+
+export const regenerateRoadmap = async (userId: string, focusArea: string = "AI Engineering", activeHoursPerWeek: number = 10, currentLevel: string = "intermediate"): Promise<any> => {
+    const response = await fetch('http://localhost:8000/agent/roadmap/regenerate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user_id: userId,
+            focus_area: focusArea,
+            active_hours_per_week: activeHoursPerWeek,
+            current_level: currentLevel
+        }),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(`Failed to regenerate roadmap: ${response.status} ${response.statusText} - ${errorData}`);
+    }
+
+    return await response.json();
+};
