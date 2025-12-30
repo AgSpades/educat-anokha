@@ -237,3 +237,36 @@ class HealthResponse(BaseModel):
     status: str
     version: str
     timestamp: datetime
+
+
+# ============== Mock Interview Schemas ==============
+
+class InterviewSessionRequest(BaseModel):
+    user_id: str
+    target_role: str
+    focus_area: Optional[str] = "General"
+    difficulty: str = "intermediate"
+
+class InterviewInteractionResponse(BaseModel):
+    session_id: str
+    question: str
+    question_type: str
+    previous_feedback: Optional[str] = None
+    previous_score: Optional[int] = None
+    state: str = "in_progress"
+
+class InterviewAnswerRequest(BaseModel):
+    user_id: str
+    session_id: str
+    answer: str
+
+class InterviewFinalReport(BaseModel):
+    session_id: str
+    user_id: str
+    role: str
+    overall_score: int
+    strengths: List[str]
+    improvements: List[str]
+    summary: str
+    transcript: List[Dict[str, str]]
+

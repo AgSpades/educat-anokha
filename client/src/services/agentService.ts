@@ -158,3 +158,40 @@ export const getMemorySummary = async (userId: string): Promise<any> => {
     return await response.json();
 };
 
+// Interview Services
+export const startInterview = async (userId: string, targetRole: string, focusArea: string = "General"): Promise<any> => {
+    const response = await fetch('http://localhost:8000/agent/interview/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            user_id: userId,
+            target_role: targetRole,
+            focus_area: focusArea,
+            difficulty: "intermediate"
+        })
+    });
+    if (!response.ok) throw new Error("Failed to start interview");
+    return await response.json();
+};
+
+export const submitInterviewAnswer = async (userId: string, sessionId: string, answer: string): Promise<any> => {
+    const response = await fetch('http://localhost:8000/agent/interview/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            user_id: userId,
+            session_id: sessionId,
+            answer: answer
+        })
+    });
+    if (!response.ok) throw new Error("Failed to submit answer");
+    return await response.json();
+};
+
+export const getInterviewReport = async (sessionId: string): Promise<any> => {
+    const response = await fetch(`http://localhost:8000/agent/interview/report/${sessionId}`);
+    if (!response.ok) throw new Error("Failed to get report");
+    return await response.json();
+};
+
+
