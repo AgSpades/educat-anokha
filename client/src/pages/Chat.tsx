@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useThemeContext } from '../contexts/ThemeContext';
 import { Link } from 'react-router-dom';
+import BackgroundGradients from '../components/landing-page-components/BackgroundGradients';
 
 interface Message {
     id: string;
@@ -14,13 +15,22 @@ const Chat: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([
         {
             id: '1',
-            text: 'Hello! I\'m Educat-AI, your personal career mentor. How can I help you today?',
+            text: 'Hello! I\'m Educat-AI, your personal career mentor. I can help you find jobs, plan your roadmap, or answer career questions. How can I help you today?',
             sender: 'ai',
             timestamp: new Date()
         }
     ]);
     const [inputValue, setInputValue] = useState('');
     const [isTyping, setIsTyping] = useState(false);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages, isTyping]);
 
     const handleSendMessage = async () => {
         if (!inputValue.trim()) return;
@@ -40,7 +50,7 @@ const Chat: React.FC = () => {
         setTimeout(() => {
             const aiMessage: Message = {
                 id: (Date.now() + 1).toString(),
-                text: 'I\'m here to help you with your career path, job recommendations, and learning resources. What specific area would you like to explore?',
+                text: 'That sounds like a great goal! Based on your profile, I recommend focusing on advanced Python concepts and looking into the "Senior AI Engineer" role I found for you.',
                 sender: 'ai',
                 timestamp: new Date()
             };
@@ -57,154 +67,138 @@ const Chat: React.FC = () => {
     };
 
     return (
-        <div className={`h-screen flex flex-col ${darkMode ? 'bg-zinc-950' : 'bg-zinc-50'}`}>
-            {/* Glassmorphic Header */}
-            <div className={`sticky top-0 z-50 border-b backdrop-blur-xl ${darkMode
-                ? 'bg-zinc-950/70 border-zinc-800/50'
-                : 'bg-white/70 border-zinc-200/50'
+        <div className={`fixed inset-0 flex flex-col font-sans overflow-hidden ${darkMode ? 'bg-zinc-950 text-zinc-100' : 'bg-zinc-50 text-zinc-900'}`}>
+            <BackgroundGradients />
+
+            {/* Navbar - Fixed Top */}
+            <div className={`relative z-50 border-b backdrop-blur-xl transition-colors duration-300 ${darkMode
+                ? 'bg-zinc-950/80 border-white/5'
+                : 'bg-white/80 border-zinc-200'
                 }`}>
-                <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
+                <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
                         <Link
                             to="/profile"
-                            className={`p-2 rounded-xl transition-all duration-200 ${darkMode
-                                ? 'hover:bg-zinc-800/50 text-zinc-400 hover:text-white'
-                                : 'hover:bg-zinc-100 text-zinc-600 hover:text-zinc-900'
+                            className={`p-2 -ml-2 rounded-xl transition-all duration-200 group ${darkMode
+                                ? 'hover:bg-white/10 text-zinc-400 hover:text-white'
+                                : 'hover:bg-zinc-100 text-zinc-500 hover:text-zinc-900'
                                 }`}
                         >
-                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg className="w-5 h-5 transition-transform group-hover:-translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                             </svg>
                         </Link>
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg">
+                            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
                                 <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                                 </svg>
                             </div>
                             <div>
-                                <h1 className={`text-lg font-bold ${darkMode ? 'text-white' : 'text-zinc-900'}`}>
-                                    Educat<span className="text-indigo-500">AI</span>
+                                <h1 className={`text-base font-bold leading-none ${darkMode ? 'text-zinc-100' : 'text-zinc-900'}`}>
+                                    Educat<span className="text-indigo-500">AI</span> Assistant
                                 </h1>
-                                <p className={`text-xs ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}>Your Career Mentor</p>
+                                <div className="flex items-center gap-1.5 mt-1">
+                                    <span className="relative flex h-2 w-2">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                    </span>
+                                    <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-500">Online</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className={`px-3 py-1.5 rounded-full text-xs font-medium ${darkMode
-                        ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                        : 'bg-emerald-50 text-emerald-600 border border-emerald-200'
-                        }`}>
-                        ● Online
                     </div>
                 </div>
             </div>
 
-            {/* Messages Container */}
-            <div className="flex-1 overflow-hidden flex flex-col">
-                <div className="flex-1 overflow-y-auto px-6 py-8">
-                    <div className="max-w-4xl mx-auto space-y-6">
-                        {messages.map((message, index) => (
-                            <div
-                                key={message.id}
-                                className={`flex gap-3 animate-fade-in-up ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'
-                                    }`}
-                                style={{ animationDelay: `${index * 50}ms` }}
-                            >
-                                {/* Avatar */}
-                                {message.sender === 'ai' && (
-                                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg ring-2 ring-indigo-500/20">
-                                        <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                        </svg>
-                                    </div>
+            {/* Chat Area - Scrollable */}
+            <div className="flex-1 overflow-y-auto relative z-10 scroll-smooth">
+                <div className="max-w-4xl mx-auto px-4 py-8 space-y-8 min-h-full">
+                    {/* Welcome/Date Separator */}
+                    <div className="flex justify-center">
+                        <span className={`text-xs font-medium px-3 py-1 rounded-full ${darkMode ? 'bg-zinc-900 text-zinc-500' : 'bg-zinc-100 text-zinc-500'}`}>
+                            Today, {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                    </div>
+
+                    {messages.map((message) => (
+                        <div
+                            key={message.id}
+                            className={`flex gap-4 ${message.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}
+                        >
+                            {/* Avatar */}
+                            <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-1 shadow-md ${message.sender === 'ai'
+                                ? 'bg-gradient-to-br from-indigo-500 to-purple-600 text-white'
+                                : 'bg-zinc-200 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-300'
+                                }`}>
+                                {message.sender === 'ai' ? (
+                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                                ) : (
+                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                                 )}
-
-                                {/* Message Bubble */}
-                                <div className={`flex-1 max-w-[75%] ${message.sender === 'user' ? 'items-end' : 'items-start'} flex flex-col`}>
-                                    <div className={`group relative px-5 py-3.5 rounded-2xl transition-all duration-200 ${message.sender === 'user'
-                                        ? 'bg-gradient-to-br from-indigo-600 to-indigo-700 text-white shadow-lg shadow-indigo-500/25'
-                                        : darkMode
-                                            ? 'bg-zinc-900/80 border border-zinc-800/50 text-zinc-100 backdrop-blur-sm'
-                                            : 'bg-white border border-zinc-200/50 text-zinc-900 shadow-sm'
-                                        }`}>
-                                        <p className="text-[15px] leading-relaxed">{message.text}</p>
-                                    </div>
-                                    <span className={`text-xs mt-1.5 px-1 ${darkMode ? 'text-zinc-600' : 'text-zinc-400'
-                                        }`}>
-                                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                    </span>
-                                </div>
                             </div>
-                        ))}
 
-                        {/* Typing Indicator */}
-                        {isTyping && (
-                            <div className="flex gap-3 animate-fade-in-up">
-                                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg ring-2 ring-indigo-500/20">
-                                    <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                    </svg>
-                                </div>
-                                <div className={`px-5 py-3.5 rounded-2xl ${darkMode
-                                    ? 'bg-zinc-900/80 border border-zinc-800/50'
-                                    : 'bg-white border border-zinc-200/50 shadow-sm'
-                                    }`}>
-                                    <div className="flex gap-1.5">
-                                        <div className={`w-2.5 h-2.5 rounded-full animate-bounce ${darkMode ? 'bg-indigo-500' : 'bg-indigo-600'
-                                            }`} style={{ animationDelay: '0ms' }}></div>
-                                        <div className={`w-2.5 h-2.5 rounded-full animate-bounce ${darkMode ? 'bg-indigo-500' : 'bg-indigo-600'
-                                            }`} style={{ animationDelay: '150ms' }}></div>
-                                        <div className={`w-2.5 h-2.5 rounded-full animate-bounce ${darkMode ? 'bg-indigo-500' : 'bg-indigo-600'
-                                            }`} style={{ animationDelay: '300ms' }}></div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                {/* Input Area */}
-                <div className={`border-t backdrop-blur-xl ${darkMode
-                    ? 'bg-zinc-950/70 border-zinc-800/50'
-                    : 'bg-white/70 border-zinc-200/50'
-                    }`}>
-                    <div className="max-w-4xl mx-auto px-6 py-4">
-                        <div className={`flex items-end gap-3 p-3 rounded-2xl border transition-all duration-200 ${darkMode
-                            ? 'bg-zinc-900/50 border-zinc-800 focus-within:border-zinc-700'
-                            : 'bg-white border-zinc-200 focus-within:border-zinc-300 shadow-sm'
-                            }`}>
-                            <textarea
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                                onKeyPress={handleKeyPress}
-                                placeholder="Type your message..."
-                                className={`flex-1 resize-none outline-none bg-transparent text-[15px] ${darkMode
-                                    ? 'text-white placeholder-zinc-500'
-                                    : 'text-zinc-900 placeholder-zinc-400'
-                                    }`}
-                                rows={1}
-                                style={{ minHeight: '28px', maxHeight: '120px' }}
-                            />
-                            <button
-                                onClick={handleSendMessage}
-                                disabled={!inputValue.trim()}
-                                className={`flex-shrink-0 p-3 rounded-xl font-semibold transition-all duration-200 ${inputValue.trim()
-                                    ? 'bg-gradient-to-br from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/40 hover:-translate-y-0.5'
+                            {/* Message Bubble */}
+                            <div className={`max-w-[80%] md:max-w-[70%] space-y-1`}>
+                                <div className={`p-4 rounded-2xl shadow-sm leading-relaxed text-[15px] ${message.sender === 'user'
+                                    ? 'bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-tr-sm'
                                     : darkMode
-                                        ? 'bg-zinc-800 text-zinc-600 cursor-not-allowed'
-                                        : 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
-                                    }`}
-                            >
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                                </svg>
-                            </button>
+                                        ? 'bg-zinc-800/80 border border-white/5 text-zinc-200 backdrop-blur-md rounded-tl-sm'
+                                        : 'bg-white border border-zinc-100 text-zinc-800 rounded-tl-sm shadow-zinc-200/50'
+                                    }`}>
+                                    {message.text}
+                                </div>
+                            </div>
                         </div>
-                        <p className={`text-xs text-center mt-2 ${darkMode ? 'text-zinc-600' : 'text-zinc-400'
-                            }`}>
-                            Press Enter to send • Shift + Enter for new line
-                        </p>
-                    </div>
+                    ))}
+
+                    {isTyping && (
+                        <div className="flex gap-4">
+                            <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mt-1 shadow-md">
+                                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                            </div>
+                            <div className={`p-4 rounded-2xl rounded-tl-sm backdrop-blur-md ${darkMode ? 'bg-zinc-800/50 border border-white/5' : 'bg-white border border-zinc-100'}`}>
+                                <div className="flex gap-1.5">
+                                    <div className="w-2 h-2 rounded-full bg-indigo-500/50 animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                                    <div className="w-2 h-2 rounded-full bg-indigo-500/50 animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                                    <div className="w-2 h-2 rounded-full bg-indigo-500/50 animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    <div ref={messagesEndRef} className="h-4" />
+                </div>
+            </div>
+
+            {/* Input Area - Fixed Bottom */}
+            <div className={`relative z-50 p-4 md:p-6 ${darkMode ? 'bg-gradient-to-t from-zinc-950 via-zinc-950/90 to-transparent' : 'bg-gradient-to-t from-zinc-50 via-zinc-50/90 to-transparent'}`}>
+                <div className={`max-w-4xl mx-auto rounded-3xl p-2 flex items-end gap-2 shadow-2xl transition-colors duration-300 border ${darkMode
+                    ? 'bg-zinc-900 border-zinc-800 ring-1 ring-white/5'
+                    : 'bg-white border-zinc-200 shadow-indigo-500/10'
+                    }`}>
+                    <textarea
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        placeholder="Ask anything about your career..."
+                        className={`flex-1 max-h-32 min-h-[48px] bg-transparent border-none focus:ring-0 resize-none py-3 px-4 outline-none ${darkMode ? 'text-zinc-100 placeholder-zinc-500' : 'text-zinc-900 placeholder-zinc-400'}`}
+                        rows={1}
+                        style={{ height: 'auto', minHeight: '48px' }}
+                    />
+                    <button
+                        onClick={handleSendMessage}
+                        disabled={!inputValue.trim()}
+                        className={`p-3 rounded-2xl transition-all duration-300 flex-shrink-0 ${inputValue.trim()
+                            ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20 hover:scale-105 active:scale-95'
+                            : darkMode
+                                ? 'bg-zinc-800 text-zinc-600 cursor-not-allowed'
+                                : 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
+                            }`}
+                    >
+                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
