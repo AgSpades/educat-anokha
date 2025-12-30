@@ -44,10 +44,10 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, toggleTheme }) => {
                             <Link to="/login" className={`text-sm font-medium transition-colors ${darkMode ? 'text-zinc-300 hover:text-white' : 'text-zinc-600 hover:text-indigo-600'}`}>
                                 Log In
                             </Link>
-                            <a href="#how-it-works" className={`relative group px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 hover:scale-105 shadow-xl ${darkMode ? 'bg-white text-zinc-950 hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
+                            <Link to="/register" className={`relative group px-6 py-2.5 rounded-full font-bold text-sm transition-all duration-300 hover:scale-105 shadow-xl ${darkMode ? 'bg-white text-zinc-950 hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}>
                                 <span className={`absolute inset-0 rounded-full blur-md opacity-40 group-hover:opacity-60 transition-opacity duration-300 ${darkMode ? 'bg-indigo-400' : 'bg-indigo-600'}`}></span>
                                 <span className="relative">Get Started</span>
-                            </a>
+                            </Link>
                         </div>
 
                         {/* Mobile Menu Button */}
@@ -91,13 +91,13 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, toggleTheme }) => {
                         >
                             Log In
                         </Link>
-                        <a
-                            href="#how-it-works"
+                        <Link
+                            to="/register"
                             onClick={() => setIsMobileMenuOpen(false)}
                             className={`block text-center px-5 py-3 rounded-xl font-semibold text-base transition-all duration-300 shadow-md ${darkMode ? 'bg-white text-zinc-950 hover:bg-zinc-100' : 'bg-zinc-900 text-white hover:bg-zinc-800'}`}
                         >
                             Get Started
-                        </a>
+                        </Link>
                     </div>
                 </div>
             </div>
