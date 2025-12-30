@@ -56,7 +56,13 @@ const Profile: React.FC = () => {
                 />
 
                 {/* Content Tabs */}
-                {activeTab === 'overview' && <DashboardOverview darkMode={darkMode} />}
+                {activeTab === 'overview' && (
+                    <DashboardOverview
+                        darkMode={darkMode}
+                        resumeName={resumeName}
+                        setResumeName={setResumeName}
+                    />
+                )}
 
                 {activeTab === 'courses' && <CourseExplorer darkMode={darkMode} />}
 
