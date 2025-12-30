@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 // import { questions } from '../onboarding-components/OnboardingForm'; // Unused now
 
 interface DashboardOverviewProps {
@@ -10,7 +11,7 @@ interface DashboardOverviewProps {
 const DashboardOverview: React.FC<DashboardOverviewProps> = ({ darkMode, resumeName, setResumeName }) => {
 
     return (
-        <div className="animate-fade-in-up space-y-6 relative">
+        <div className="animate-fade-in-up space-y-12 relative">
             {/* Background Glow */}
             <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl mix-blend-multiply opacity-50 animate-blob pointer-events-none z-0"></div>
             <div className="absolute top-40 left-0 -ml-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl mix-blend-multiply opacity-50 animate-blob animation-delay-2000 pointer-events-none z-0"></div>
@@ -52,6 +53,49 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({ darkMode, resumeN
                     </label>
                 </div>
             </div>
+
+            {/* Content Revealed After Upload */}
+            {resumeName && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in-up">
+                    {/* Jobs Card */}
+                    <Link to="/jobs" className={`group relative p-8 rounded-3xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl flex flex-col justify-between h-64 overflow-hidden ${darkMode ? 'bg-zinc-900/50 border-zinc-800 hover:border-indigo-500/50 hover:shadow-indigo-500/10' : 'bg-white border-zinc-200 hover:border-indigo-500 hover:shadow-indigo-500/10'}`}>
+                        <div className="relative z-10">
+                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110 ${darkMode ? 'bg-zinc-800 text-indigo-400' : 'bg-indigo-50 text-indigo-600'}`}>
+                                <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                            </div>
+                            <h3 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Recommended Jobs</h3>
+                            <p className={`${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>
+                                View personalized job matches based on your resume and skills.
+                            </p>
+                        </div>
+                        <div className="relative z-10 flex items-center gap-2 text-indigo-500 font-semibold group-hover:translate-x-2 transition-transform">
+                            <span>Explore Opportunities</span>
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                        </div>
+                        {/* Decorative Background Element */}
+                        <div className={`absolute -right-10 -bottom-10 w-40 h-40 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity ${darkMode ? 'bg-indigo-500' : 'bg-indigo-400'}`}></div>
+                    </Link>
+
+                    {/* Roadmap Card */}
+                    <Link to="/roadmap" className={`group relative p-8 rounded-3xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl flex flex-col justify-between h-64 overflow-hidden ${darkMode ? 'bg-zinc-900/50 border-zinc-800 hover:border-purple-500/50 hover:shadow-purple-500/10' : 'bg-white border-zinc-200 hover:border-purple-500 hover:shadow-purple-500/10'}`}>
+                        <div className="relative z-10">
+                            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform group-hover:scale-110 ${darkMode ? 'bg-zinc-800 text-purple-400' : 'bg-purple-50 text-purple-600'}`}>
+                                <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0121 18.382V7.618a1 1 0 01-1.447-.894L15 7m0 13V7" /></svg>
+                            </div>
+                            <h3 className={`text-2xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-zinc-900'}`}>Learning Roadmap</h3>
+                            <p className={`${darkMode ? 'text-zinc-400' : 'text-zinc-500'}`}>
+                                Track your progress and master new skills with your personalized path.
+                            </p>
+                        </div>
+                        <div className="relative z-10 flex items-center gap-2 text-purple-500 font-semibold group-hover:translate-x-2 transition-transform">
+                            <span>Continue Learning</span>
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                        </div>
+                        {/* Decorative Background Element */}
+                        <div className={`absolute -right-10 -bottom-10 w-40 h-40 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity ${darkMode ? 'bg-purple-500' : 'bg-purple-400'}`}></div>
+                    </Link>
+                </div>
+            )}
         </div>
     );
 };
