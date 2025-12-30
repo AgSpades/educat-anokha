@@ -1,8 +1,8 @@
 import React from 'react';
 import { useThemeContext } from '../contexts/ThemeContext';
-import RoadmapNavbar from '../roadmap-components/RoadmapNavbar';
-import Roadmap3D from '../roadmap-components/Roadmap3D';
-import RoadmapPath from '../roadmap-components/RoadmapPath';
+import RoadmapNavbar from '../components/roadmap-components/RoadmapNavbar';
+import Roadmap3D from '../components/roadmap-components/Roadmap3D';
+import RoadmapPath from '../components/roadmap-components/RoadmapPath';
 
 interface RoadmapNode {
     id: string;

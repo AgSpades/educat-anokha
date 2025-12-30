@@ -1,15 +1,15 @@
 import React from 'react';
 import { useThemeContext } from '../contexts/ThemeContext';
-import Navbar from '../landing-page-components/Navbar';
-import Hero from '../landing-page-components/Hero';
+import Navbar from '../components/landing-page-components/Navbar';
+import Hero from '../components/landing-page-components/Hero';
 
-import Features from '../landing-page-components/Features';
-import InteractiveRoadmap from '../landing-page-components/InteractiveRoadmap';
-import HowItWorks from '../landing-page-components/HowItWorks';
-import Testimonials from '../landing-page-components/Testimonials';
-import CallToAction from '../landing-page-components/CallToAction';
-import Footer from '../landing-page-components/Footer';
-import BackgroundGradients from '../landing-page-components/BackgroundGradients';
+import Features from '../components/landing-page-components/Features';
+import InteractiveRoadmap from '../components/landing-page-components/InteractiveRoadmap';
+import HowItWorks from '../components/landing-page-components/HowItWorks';
+import Testimonials from '../components/landing-page-components/Testimonials';
+import CallToAction from '../components/landing-page-components/CallToAction';
+import Footer from '../components/landing-page-components/Footer';
+import BackgroundGradients from '../components/landing-page-components/BackgroundGradients';
 
 const LandingPage: React.FC = () => {
   const { darkMode, toggleTheme } = useThemeContext();

@@ -1,5 +1,5 @@
 import React from 'react';
-import ecaiLogo from '../assets/ecai.png';
+import ecaiLogo from '../../assets/ecai.png';
 
 interface FooterProps {
     darkMode: boolean;
@@ -24,7 +24,7 @@ const Footer: React.FC<FooterProps> = ({ darkMode }) => {
                     </div>
 
                     <div className={`text-sm ${darkMode ? 'text-zinc-600' : 'text-zinc-400'}`}>
-                        © 2025 Educat-AI Inc.
+                        &copy;{new Date().getFullYear()} EducatAI
                     </div>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { features } from '../data/landingPageData';
+import { features } from '../../data/landingPageData';
 import ScrollReveal from './ScrollReveal';
 
 interface FeaturesProps {

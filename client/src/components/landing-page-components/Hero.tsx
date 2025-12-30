@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface HeroProps {
     darkMode: boolean;
@@ -31,10 +32,10 @@ const Hero: React.FC<HeroProps> = ({ darkMode }) => {
                         </p>
 
                         <div className='flex flex-col sm:flex-row gap-4 animate-fade-in-up animation-delay-300 opacity-0 w-full sm:w-auto px-4 sm:px-0'>
-                            <a href="#how-it-works" className={`inline-flex justify-center items-center px-8 py-4 rounded-xl text-lg font-bold transition-all transform hover:-translate-y-1 shadow-lg hover:shadow-indigo-500/25 ${darkMode ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-500/20' : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-600/20'}`}>
+                            <Link to="/register" className={`inline-flex justify-center items-center px-8 py-4 rounded-xl text-lg font-bold transition-all transform hover:-translate-y-1 shadow-lg hover:shadow-indigo-500/25 ${darkMode ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-500/20' : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-indigo-600/20'}`}>
                                 Start Free Trial
                                 <svg className="w-5 h-5 ml-2 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-                            </a>
+                            </Link>
                             <a href="#features" className={`inline-flex justify-center items-center px-8 py-4 rounded-xl text-lg font-medium border transition-all hover:-translate-y-1 ${darkMode ? 'text-white border-white/10 hover:bg-white/5 backdrop-blur-sm' : 'text-zinc-700 border-zinc-200 hover:bg-zinc-50'}`}>
                                 View Demo
                             </a>
