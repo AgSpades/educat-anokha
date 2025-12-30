@@ -1,6 +1,6 @@
 import React from 'react';
-import AuthLayout from '../auth-components/AuthLayout';
-import OnboardingForm from '../onboarding-components/OnboardingForm';
+import AuthLayout from '../components/auth-components/AuthLayout';
+import OnboardingForm from '../components/onboarding-components/OnboardingForm';
 
 const Onboarding: React.FC = () => {
     return (

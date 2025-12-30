@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import ecaiLogo from '../assets/ecai.png';
-import { navLinks } from '../data/landingPageData';
+import ecaiLogo from '../../assets/ecai.png';
+import { navLinks } from '../../data/landingPageData';
 import ThemeToggle from './ThemeToggle';
 
 interface NavbarProps {

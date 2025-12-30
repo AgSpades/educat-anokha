@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useThemeContext } from '../contexts/ThemeContext';
 import { Link } from 'react-router-dom';
-import BackgroundGradients from '../landing-page-components/BackgroundGradients';
-import ProfileNavbar from '../profile-components/ProfileNavbar';
-import ProfileHeader from '../profile-components/ProfileHeader';
-import DashboardOverview from '../profile-components/DashboardOverview';
-import CourseExplorer from '../profile-components/CourseExplorer';
-import ProfileSettings from '../profile-components/ProfileSettings';
+import BackgroundGradients from '../components/landing-page-components/BackgroundGradients';
+import ProfileNavbar from '../components/profile-components/ProfileNavbar';
+import ProfileHeader from '../components/profile-components/ProfileHeader';
+import DashboardOverview from '../components/profile-components/DashboardOverview';
+import CourseExplorer from '../components/profile-components/CourseExplorer';
+import ProfileSettings from '../components/profile-components/ProfileSettings';
 
 const Profile: React.FC = () => {
     const { darkMode, toggleTheme } = useThemeContext();

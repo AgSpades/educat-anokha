@@ -1,9 +1,9 @@
 import React from 'react';
 import type { ReactNode } from 'react';
-import { useThemeContext } from '../contexts/ThemeContext';
+import { useThemeContext } from '../../contexts/ThemeContext';
 import BackgroundGradients from '../landing-page-components/BackgroundGradients';
 import ThemeToggle from '../landing-page-components/ThemeToggle';
-import ecaiLogo from '../assets/ecai.png';
+import ecaiLogo from '../../assets/ecai.png';
 
 interface AuthLayoutProps {
     children: ReactNode;

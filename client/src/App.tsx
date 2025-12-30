@@ -10,7 +10,7 @@ import Roadmap from './pages/Roadmap';
 import Jobs from './pages/Jobs';
 
 import { AuthProvider } from './contexts/AuthContext';
-import ProtectedRoute from './auth-components/ProtectedRoute';
+import ProtectedRoute from './components/auth-components/ProtectedRoute';
 
 function App() {
   return (

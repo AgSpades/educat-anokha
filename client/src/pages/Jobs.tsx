@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useThemeContext } from '../contexts/ThemeContext';
-import BackgroundGradients from '../landing-page-components/BackgroundGradients';
+import BackgroundGradients from '../components/landing-page-components/BackgroundGradients';
 import { Link } from 'react-router-dom';
-import Jobs3DVisual from '../jobs-components/Jobs3DVisual';
+import Jobs3DVisual from '../components/jobs-components/Jobs3DVisual';
 
 interface Job {
     id: string;

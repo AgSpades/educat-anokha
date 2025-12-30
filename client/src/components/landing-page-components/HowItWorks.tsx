@@ -1,5 +1,5 @@
 import React from 'react';
-import { howItWorksSteps, badges } from '../data/landingPageData';
+import { howItWorksSteps, badges } from '../../data/landingPageData';
 import ScrollReveal from './ScrollReveal';
 
 interface HowItWorksProps {

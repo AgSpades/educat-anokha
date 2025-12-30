@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useThemeContext } from '../contexts/ThemeContext';
+import { useThemeContext } from '../../contexts/ThemeContext';
 
 export interface Question {
     id: number;

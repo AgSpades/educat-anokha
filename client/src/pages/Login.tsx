@@ -1,5 +1,5 @@
-import SplitAuthLayout from '../auth-components/SplitAuthLayout';
-import LoginForm from '../auth-components/LoginForm';
+import SplitAuthLayout from '../components/auth-components/SplitAuthLayout';
+import LoginForm from '../components/auth-components/LoginForm';
 
 const Login: React.FC = () => {
     return (

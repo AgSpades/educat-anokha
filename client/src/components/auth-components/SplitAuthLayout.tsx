@@ -1,11 +1,11 @@
 import React from 'react';
 import type { ReactNode } from 'react';
-import { useThemeContext } from '../contexts/ThemeContext';
+import { useThemeContext } from '../../contexts/ThemeContext';
 import BackgroundGradients from '../landing-page-components/BackgroundGradients';
 import ThemeToggle from '../landing-page-components/ThemeToggle';
 import LoginVisual from './LoginVisual';
 import RegisterVisual from './RegisterVisual';
-import ecaiLogo from '../assets/ecai.png';
+import ecaiLogo from '../../assets/ecai.png';
 import { Link } from 'react-router-dom';
 
 interface SplitAuthLayoutProps {

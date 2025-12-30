@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ThemeToggle from '../landing-page-components/ThemeToggle';
-import ecaiLogo from '../assets/ecai.png';
+import ecaiLogo from '../../assets/ecai.png';
 
 interface ProfileNavbarProps {
     darkMode: boolean;

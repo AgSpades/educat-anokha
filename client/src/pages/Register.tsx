@@ -1,5 +1,5 @@
-import SplitAuthLayout from '../auth-components/SplitAuthLayout';
-import RegisterForm from '../auth-components/RegisterForm';
+import SplitAuthLayout from '../components/auth-components/SplitAuthLayout';
+import RegisterForm from '../components/auth-components/RegisterForm';
 
 const Register: React.FC = () => {
     return (

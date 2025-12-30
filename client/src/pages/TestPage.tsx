@@ -1,7 +1,7 @@
 import { AppwriteException } from "appwrite";
 import { useState } from "react";
 import { useTheme } from "../hooks/useTheme";
-import ThemeToggle from "../landing-page-components/ThemeToggle";
+import ThemeToggle from "../components/landing-page-components/ThemeToggle";
 import { client } from "../lib/appwrite";
 
 export default function TestPage() {
