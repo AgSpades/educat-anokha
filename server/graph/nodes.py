@@ -217,7 +217,21 @@ Generate your response:"""
         
         response = await self.llm.ainvoke(response_prompt)
         
-        state["response"] = response.content
+        # Ensure response content is a string
+        content = response.content
+        if isinstance(content, list):
+            # Handle list of content blocks
+            text_parts = []
+            for block in content:
+                if isinstance(block, str):
+                    text_parts.append(block)
+                elif isinstance(block, dict) and 'text' in block:
+                    text_parts.append(block['text'])
+                else:
+                    text_parts.append(str(block))
+            state["response"] = " ".join(text_parts)
+        else:
+            state["response"] = str(content)
         
         # Generate suggestions
         state["suggestions"] = self._extract_suggestions(state)
