@@ -68,3 +68,23 @@ export const parseResume = async (userId: string, file: File): Promise<any> => {
 
     return await response.json();
 };
+
+export const recommendJobs = async (userId: string, limit: number = 5): Promise<any> => {
+    const response = await fetch('http://localhost:8000/agent/jobs/recommend', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user_id: userId,
+            limit: limit
+        }),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(`Failed to get job recommendations: ${response.status} ${response.statusText} - ${errorData}`);
+    }
+
+    return await response.json();
+};
