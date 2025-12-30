@@ -8,6 +8,7 @@ import Onboarding from './pages/Onboarding';
 import Profile from './pages/Profile';
 import Roadmap from './pages/Roadmap';
 import Jobs from './pages/Jobs';
+import Chat from './pages/Chat';
 
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/auth-components/ProtectedRoute';
@@ -25,6 +26,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/roadmap" element={<Roadmap />} />
             <Route path="/jobs" element={<Jobs />} />
+            <Route path="/chat" element={<Chat />} />
           </Route>
         </Routes>
       </AuthProvider>
