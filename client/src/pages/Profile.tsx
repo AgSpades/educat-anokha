@@ -8,16 +8,26 @@ import DashboardOverview from '../components/profile-components/DashboardOvervie
 import CourseExplorer from '../components/profile-components/CourseExplorer';
 import ProfileSettings from '../components/profile-components/ProfileSettings';
 
+import { useAuth } from '../contexts/AuthContext';
+
 const Profile: React.FC = () => {
     const { darkMode, toggleTheme } = useThemeContext();
+    const { user } = useAuth();
     const [activeTab, setActiveTab] = useState<'overview' | 'courses' | 'settings'>('overview');
 
     // Profile State (Shared across Navbar, Header, Settings)
-    const [name, setName] = useState('John Doe');
-    const [email, setEmail] = useState('john@example.com');
+    const [name, setName] = useState(user?.name || 'John Doe');
+    const [email, setEmail] = useState(user?.email || 'john@example.com');
     const [bio, setBio] = useState('Passionate learner exploring the world of technology.');
+
+    React.useEffect(() => {
+        if (user) {
+            setName(user.name);
+            setEmail(user.email);
+        }
+    }, [user]);
     const [photo, setPhoto] = useState<string | null>(null);
-    const [resumeName, setResumeName] = useState<string | null>('John_Doe_CV.pdf');
+    const [resumeName, setResumeName] = useState<string | null>(null);
 
     const getInitials = (n: string) => {
         return n.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2);
