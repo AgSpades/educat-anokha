@@ -146,3 +146,15 @@ export const regenerateRoadmap = async (userId: string, focusArea: string = "AI 
 
     return await response.json();
 };
+
+export const getMemorySummary = async (userId: string): Promise<any> => {
+    const response = await fetch(`http://localhost:8000/agent/memory/summary?user_id=${userId}`);
+
+    if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(`Failed to get memory summary: ${response.status} ${response.statusText} - ${errorData}`);
+    }
+
+    return await response.json();
+};
+

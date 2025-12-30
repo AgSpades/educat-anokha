@@ -9,6 +9,7 @@ import CourseExplorer from '../components/profile-components/CourseExplorer';
 import ProfileSettings from '../components/profile-components/ProfileSettings';
 
 import { useAuth } from '../contexts/AuthContext';
+import { getMemorySummary } from '../services/agentService';
 
 const Profile: React.FC = () => {
     const { darkMode, toggleTheme } = useThemeContext();
@@ -20,12 +21,31 @@ const Profile: React.FC = () => {
     const [email, setEmail] = useState(user?.email || 'john@example.com');
     const [bio, setBio] = useState('Passionate learner exploring the world of technology.');
 
+    // Dynamic Stats State
+    const [stats, setStats] = useState({
+        skillsCount: 0,
+        milestonesCompleted: 0,
+        applicationsTracked: 0,
+        currentFocus: "Software Engineering"
+    });
+
     React.useEffect(() => {
         if (user) {
             setName(user.name);
             setEmail(user.email);
+
+            // Fetch stats
+            getMemorySummary(user.$id).then(data => {
+                setStats({
+                    skillsCount: data.skills?.length || 0,
+                    milestonesCompleted: data.completed_milestones || 0,
+                    applicationsTracked: data.total_applications || 0,
+                    currentFocus: data.current_focus || "Software Engineering"
+                });
+            }).catch(err => console.error("Failed to fetch profile stats:", err));
         }
     }, [user]);
+
     const [photo, setPhoto] = useState<string | null>(null);
     const [resumeName, setResumeName] = useState<string | null>(null);
 
@@ -53,6 +73,7 @@ const Profile: React.FC = () => {
                     name={name}
                     photo={photo}
                     getInitials={getInitials}
+                    stats={stats}
                 />
 
                 {/* Content Tabs */}
