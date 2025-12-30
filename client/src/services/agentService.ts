@@ -7,7 +7,8 @@ export interface AgentMessageResponse {
 export const sendMessageToAgent = async (userId: string, message: string, retries = 3, delay = 1000): Promise<string> => {
     for (let i = 0; i < retries; i++) {
         try {
-            const response = await fetch('https://educat.saumyajit.dev/agent/message', {
+            // const response = await fetch('https://educat.saumyajit.dev/agent/message', {
+            const response = await fetch('http://localhost:8000/agent/message', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,7 +56,7 @@ export const parseResume = async (userId: string, file: File): Promise<any> => {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch(`https://educat.saumyajit.dev/agent/resume/parse?user_id=${userId}`, {
+    const response = await fetch(`http://localhost:8000/agent/resume/parse?user_id=${userId}`, {
         method: 'POST',
         body: formData,
     });
