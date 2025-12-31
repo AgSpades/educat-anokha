@@ -11,6 +11,7 @@ langchain-community
 langchain-anthropic
 langgraph
 langchain-postgres
+langchain-groq
 voyageai
 
 # Database & Vector Store
