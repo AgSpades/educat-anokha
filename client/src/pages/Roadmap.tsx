@@ -28,24 +28,6 @@ const Roadmap: React.FC = () => {
     const [isRegenerating, setIsRegenerating] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // Static fallback data
-    const fallbackNodes: RoadmapNode[] = [
-        {
-            id: '1',
-            title: 'Python Basics',
-            status: 'completed',
-            description: 'Mastering syntax, loops, and functions.',
-            position: { x: 50, y: 10 },
-            performance: { score: 98, grade: 'A+', summary: 'Exceptional coding speed.' },
-            details: {
-                topics: ['Variables & Data Types', 'Control Flow (If/Else, Loops)', 'Functions & Modules', 'File I/O'],
-                estimatedDuration: '2 Weeks',
-                skillsGained: ['Problem Solving', 'Scripting', 'Code Organization']
-            }
-        },
-        // ... (keep other static nodes if needed or just use this one as example)
-    ];
-
     const fetchRoadmap = async () => {
         if (!user?.$id) return;
         setLoading(true);
