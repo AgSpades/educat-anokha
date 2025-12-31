@@ -52,9 +52,12 @@ export const sendMessageToAgent = async (userId: string, message: string, retrie
     throw new Error("Failed to send message after retries");
 };
 
-export const parseResume = async (userId: string, file: File): Promise<any> => {
+export const parseResume = async (userId: string, file: File, fileId?: string): Promise<any> => {
     const formData = new FormData();
     formData.append('file', file);
+    if (fileId) {
+        formData.append('resume_file_id', fileId);
+    }
 
     const response = await fetch(`http://localhost:8000/agent/resume/parse?user_id=${userId}`, {
         method: 'POST',

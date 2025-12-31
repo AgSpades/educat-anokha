@@ -71,6 +71,7 @@ class ApplicationOutcomeRequest(BaseModel):
 class ResumeUploadRequest(BaseModel):
     """Request for resume parsing."""
     user_id: str
+    resume_file_id: Optional[str] = Field(default=None, description="Appwrite File ID")
     file_type: str = Field(..., description="File type: pdf or docx")
 
 
@@ -153,6 +154,8 @@ class MemorySummary(BaseModel):
     total_applications: int
     completed_milestones: int
     current_focus: Optional[str] = None
+    resume_filename: Optional[str] = None
+    resume_file_id: Optional[str] = None
     last_activity: datetime
 
 

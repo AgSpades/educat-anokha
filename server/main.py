@@ -1,5 +1,5 @@
 """Main FastAPI application for Career Mentor API."""
-from fastapi import FastAPI, Depends, HTTPException, UploadFile, File
+from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from datetime import datetime
@@ -303,6 +303,7 @@ if __name__ == "__main__":
 async def parse_resume(
     user_id: str,
     file: UploadFile = File(...),
+    resume_file_id: str = Form(None),
     db: Session = Depends(get_db)
 ):
     """
@@ -330,18 +331,25 @@ async def parse_resume(
         # Ensure user profile exists
         ensure_user_profile(db, user_id)
         
-        # Update user profile with extracted skills
-        profile = db.query(UserProfile).filter(UserProfile.user_id == user_id).first()
-        if profile and parsed_data.get('skills'):
+        # Update user profile with extracted skills and resume info
+        profile_update = {}
+        
+        if parsed_data.get('skills'):
             # Overwrite skills with new data from resume
-            # This ensures we don't accumulate stale skills from previous uploads
             new_skills_list = [
                 {"name": skill, "level": "intermediate", "verified": True}
                 for skill in parsed_data['skills']
             ]
+            profile_update["skills"] = new_skills_list
             
+        # Update resume info if file_id provided
+        if resume_file_id:
+            profile_update["resume_filename"] = file.filename
+            profile_update["resume_file_id"] = resume_file_id
+            
+        if profile_update:
             db.query(UserProfile).filter(UserProfile.user_id == user_id).update(
-                {"skills": new_skills_list},
+                profile_update,
                 synchronize_session=False
             )
             db.commit()

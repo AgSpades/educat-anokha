@@ -42,6 +42,9 @@ const Profile: React.FC = () => {
                     applicationsTracked: data.total_applications || 0,
                     currentFocus: data.current_focus || "Software Engineering"
                 });
+                if (data.resume_filename) {
+                    setResumeName(data.resume_filename);
+                }
             }).catch(err => console.error("Failed to fetch profile stats:", err));
         }
     }, [user]);

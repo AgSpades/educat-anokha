@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { parseResume } from '../../services/agentService';
+import { storage } from '../../lib/appwrite';
 // import { questions } from '../onboarding-components/OnboardingForm'; // Unused now
 
 interface DashboardOverviewProps {
@@ -54,9 +55,25 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({ darkMode, resumeN
 
                                     if (user && user.$id) {
                                         try {
-                                            console.log("Uploading and parsing resume...");
-                                            const parsedData = await parseResume(user.$id, file);
-                                            console.log("Parsed Resume Data:", parsedData);
+                                            console.log("Uploading to Appwrite Storage...");
+                                            try {
+                                                const bucketId = import.meta.env.VITE_APPWRITE_BUCKET_ID;
+                                                const uploadedFile = await storage.createFile(
+                                                    bucketId,
+                                                    'unique()',
+                                                    file
+                                                );
+                                                console.log("File uploaded:", uploadedFile);
+
+                                                console.log("Parsing resume with file ID...");
+                                                const parsedData = await parseResume(user.$id, file, uploadedFile.$id);
+                                                console.log("Parsed Resume Data:", parsedData);
+                                            } catch (uploadError) {
+                                                console.error("Appwrite upload failed:", uploadError);
+                                                // Fallback to just parsing without ID if upload fails (or config missing)
+                                                console.log("Falling back to parse only...");
+                                                await parseResume(user.$id, file);
+                                            }
                                         } catch (error) {
                                             console.error("Error parsing resume:", error);
                                         }
