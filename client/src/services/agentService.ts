@@ -119,7 +119,7 @@ export const getCurrentRoadmap = async (userId: string): Promise<any> => {
     const response = await fetch(`${API_BASE_URL}/agent/roadmap/current?user_id=${userId}`);
 
     if (response.status === 404) {
-        return { roadmap: [] }; // Return empty structure for new users
+        return { milestones: [] }; // Return empty structure for new users
     }
 
     if (!response.ok) {
