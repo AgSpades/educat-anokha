@@ -22,6 +22,37 @@ class CareerMentorTools:
             api_key=settings.GROQ_API_KEY,
             temperature=0.7
         )
+
+    async def infer_best_fit_role(self, user_id: str) -> str:
+        """
+        Infer the best fit role based on user profile using LLM.
+        
+        Args:
+            user_id: User identifier
+            
+        Returns:
+            Inferred role title
+        """
+        try:
+            profile = await self.read_user_profile(user_id)
+            current_skills = profile.get('skills', [])
+            skill_names = [s['name'] if isinstance(s, dict) else s for s in current_skills]
+            
+            if not skill_names:
+                return "Entry Level Software Engineer"
+                
+            prompt = f"""Based on these technical skills: {', '.join(skill_names)}
+            
+            Determine the single best fitting specific job role title (e.g., "Frontend Developer", "Data Scientist", "DevOps Engineer").
+            Return ONLY the role title string. No explanation."""
+            
+            response = await self.llm.ainvoke(prompt)
+            role = response.content.strip().replace('"', '').replace("'", "")
+            return role
+            
+        except Exception as e:
+            print(f"Error inferring role: {e}")
+            return "Software Engineer"
     
     async def read_user_profile(self, user_id: str) -> Dict[str, Any]:
         """
@@ -87,7 +118,7 @@ class CareerMentorTools:
         target_role: str
     ) -> List[str]:
         """
-        Analyze skill gaps for a target role.
+        Analyze skill gaps for a target role using LLM.
         
         Args:
             user_id: User identifier
@@ -97,7 +128,52 @@ class CareerMentorTools:
             List of missing skills
         """
         profile = await self.read_user_profile(user_id)
-        current_skills = {s['name'].lower() for s in profile['skills']}
+        current_skills = profile.get('skills', [])
+        # Extract skill names if they are dicts
+        skill_names = [s['name'] if isinstance(s, dict) else s for s in current_skills]
+        
+        # 1. Try LLM for dynamic analysis
+        try:
+            prompt = f"""Analyze the skill gaps for a user targeting the role of '{target_role}'.
+            
+            User's Current Skills: {', '.join(skill_names) if skill_names else 'None listed'}
+            
+            Current Job Market Context: Late 2024/2025.
+            
+            Identify the top 5-7 most critical missing skills or technologies this user needs to learn to be a competitive candidate for a {target_role} position.
+            Focus on technical skills, tools, and frameworks.
+            
+            Return ONLY a valid JSON array of strings, e.g., ["Skill 1", "Skill 2"]. Do not include any other text or markdown formatting."""
+            
+            response = await self.llm.ainvoke(prompt)
+            content = response.content.strip()
+            
+            # Clean up potential markdown formatting
+            if content.startswith('```json'):
+                content = content[7:]
+            if content.startswith('```'):
+                content = content[3:]
+            if content.endswith('```'):
+                content = content[:-3]
+            
+            skill_gaps = json.loads(content.strip())
+            
+            if isinstance(skill_gaps, list) and len(skill_gaps) > 0:
+                # Filter out skills user already has (simple string matching)
+                current_skills_lower = {s.lower() for s in skill_names}
+                final_gaps = [
+                    skill for skill in skill_gaps 
+                    if skill.lower() not in current_skills_lower
+                ]
+                # If LLM returns all skills user has (unlikely), return original list or top 3
+                return final_gaps if final_gaps else skill_gaps[:3]
+
+        except Exception as e:
+            print(f"LLM skill gap analysis failed: {e}")
+            # Fall through to static dictionary
+            
+        # 2. Fallback to static dictionary
+        current_skills_set = {s.lower() for s in skill_names}
         
         # Role-specific skill requirements (2025 market)
         role_requirements = {
@@ -113,7 +189,7 @@ class CareerMentorTools:
                 "rest api", "databases", "authentication", "caching",
                 "microservices", "docker", "kubernetes"
             ],
-            "backend engineer": [  # Added alias
+            "backend engineer": [
                 "rest api", "databases", "authentication", "caching",
                 "microservices", "docker", "kubernetes"
             ],
@@ -143,10 +219,73 @@ class CareerMentorTools:
                     required = role_requirements[key]
                     break
         
-        gaps = [skill for skill in required if skill not in current_skills]
+        gaps = [skill for skill in required if skill not in current_skills_set]
         
         return gaps
     
+    async def generate_roadmap_plan(
+        self,
+        role: str,
+        skill_gaps: List[str],
+        timeline_weeks: int
+    ) -> List[Dict[str, Any]]:
+        """
+        Generate detailed, actionable milestones for a roadmap.
+        
+        Args:
+           role: Target role
+           skill_gaps: List of skills to learn
+           timeline_weeks: Total timeline
+           
+        Returns:
+           List of milestone dictionaries with title, description, and details
+        """
+        prompt = f"""Create a {timeline_weeks}-week learning roadmap for a {role}.
+        The user specifically needs to learn these skills: {', '.join(skill_gaps)}.
+        
+        Create 5 distinct milestones that logically progress from foundational to advanced.
+        
+        For each milestone, provide:
+        - title: A specific, action-oriented title (NOT just "Master X"). E.g., "Build a REST API with FastAPI" or "Deploying Microservices on AWS".
+        - description: A detailed 1-sentence description of what they will achieve.
+        - skills: specific sub-skills or topics covered in this milestone.
+        - estimated_hours: realistic hours to complete.
+        
+        Return ONLY a valid JSON array of objects. Example:
+        [
+            {{
+                "title": "...",
+                "description": "...",
+                "skills": ["..."],
+                "estimated_hours": 20
+            }}
+        ]"""
+        
+        try:
+            response = await self.llm.ainvoke(prompt)
+            content = response.content.strip()
+             # Clean up potential markdown formatting
+            if content.startswith('```json'):
+                content = content[7:]
+            if content.startswith('```'):
+                content = content[3:]
+            if content.endswith('```'):
+                content = content[:-3]
+                
+            plan = json.loads(content.strip())
+            return plan
+        except Exception as e:
+            print(f"Error generating roadmap plan: {e}")
+            # Fallback to simple generation if LLM fails
+            return [
+                {
+                    "title": f"Learn {skill}",
+                    "description": f"Focus on mastering {skill} concepts and building a small project.",
+                    "skills": [skill],
+                    "estimated_hours": 20
+                }
+                for skill in skill_gaps[:5]
+            ]
     async def analyze_market_trends(
         self,
         role: str,
