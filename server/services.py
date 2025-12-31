@@ -74,6 +74,8 @@ class CareerMentorService:
             "total_applications": total_applications,
             "completed_milestones": completed_milestones,
             "current_focus": profile.target_role,
+            "resume_filename": profile.resume_filename,
+            "resume_file_id": profile.resume_file_id,
             "last_activity": profile.updated_at,
             "memory_insights": memory_insights
         }

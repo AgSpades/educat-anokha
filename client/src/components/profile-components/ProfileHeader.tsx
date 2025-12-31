@@ -6,9 +6,15 @@ interface ProfileHeaderProps {
     name: string;
     photo: string | null;
     getInitials: (name: string) => string;
+    stats: {
+        skillsCount: number;
+        milestonesCompleted: number;
+        applicationsTracked: number;
+        currentFocus: string;
+    };
 }
 
-const ProfileHeader: React.FC<ProfileHeaderProps> = ({ darkMode, name, photo, getInitials }) => {
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({ darkMode, name, photo, getInitials, stats }) => {
     return (
         <div className="mb-12 flex flex-col lg:flex-row items-center lg:items-center justify-between gap-10">
             {/* Left Column: Text & Stats */}
@@ -21,22 +27,22 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ darkMode, name, photo, ge
                         </span>
                     </h1>
                     <p className={`text-lg ${darkMode ? 'text-zinc-400' : 'text-zinc-600'} max-w-md mx-auto`}>
-                        Your learning journey is on track. You're currently mastering AI & Machine Learning.
+                        Your learning journey is on track. You're currently focusing on <span className="font-semibold text-indigo-500">{stats.currentFocus}</span>.
                     </p>
                 </div>
 
                 <div className="flex flex-wrap justify-center gap-4 w-full">
                     <div className={`flex-1 min-w-[140px] px-6 py-4 rounded-2xl border transition-transform hover:scale-105 ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'} backdrop-blur-sm shadow-sm flex flex-col items-center`}>
-                        <div className={`text-3xl font-bold ${darkMode ? 'text-white' : 'text-zinc-900'}`}>12</div>
-                        <div className={`text-xs uppercase tracking-wider font-semibold mt-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>Hours Learned</div>
+                        <div className={`text-3xl font-bold ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{stats.skillsCount}</div>
+                        <div className={`text-xs uppercase tracking-wider font-semibold mt-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>Skills Identified</div>
                     </div>
                     <div className={`flex-1 min-w-[140px] px-6 py-4 rounded-2xl border transition-transform hover:scale-105 ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'} backdrop-blur-sm shadow-sm flex flex-col items-center`}>
-                        <div className={`text-3xl font-bold ${darkMode ? 'text-white' : 'text-zinc-900'}`}>2</div>
-                        <div className={`text-xs uppercase tracking-wider font-semibold mt-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>Certificates</div>
+                        <div className={`text-3xl font-bold ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{stats.milestonesCompleted}</div>
+                        <div className={`text-xs uppercase tracking-wider font-semibold mt-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>Milestones Done</div>
                     </div>
                     <div className={`flex-1 min-w-[140px] px-6 py-4 rounded-2xl border transition-transform hover:scale-105 ${darkMode ? 'bg-zinc-900/50 border-zinc-800' : 'bg-white border-zinc-200'} backdrop-blur-sm shadow-sm flex flex-col items-center`}>
-                        <div className={`text-3xl font-bold ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>Top 5%</div>
-                        <div className={`text-xs uppercase tracking-wider font-semibold mt-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>Class Rank</div>
+                        <div className={`text-3xl font-bold ${darkMode ? 'text-indigo-400' : 'text-indigo-600'}`}>{stats.applicationsTracked}</div>
+                        <div className={`text-xs uppercase tracking-wider font-semibold mt-1 ${darkMode ? 'text-zinc-500' : 'text-zinc-500'}`}>Jobs Applied</div>
                     </div>
                 </div>
             </div>

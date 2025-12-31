@@ -71,6 +71,7 @@ class ApplicationOutcomeRequest(BaseModel):
 class ResumeUploadRequest(BaseModel):
     """Request for resume parsing."""
     user_id: str
+    resume_file_id: Optional[str] = Field(default=None, description="Appwrite File ID")
     file_type: str = Field(..., description="File type: pdf or docx")
 
 
@@ -153,6 +154,8 @@ class MemorySummary(BaseModel):
     total_applications: int
     completed_milestones: int
     current_focus: Optional[str] = None
+    resume_filename: Optional[str] = None
+    resume_file_id: Optional[str] = None
     last_activity: datetime
 
 
@@ -237,3 +240,36 @@ class HealthResponse(BaseModel):
     status: str
     version: str
     timestamp: datetime
+
+
+# ============== Mock Interview Schemas ==============
+
+class InterviewSessionRequest(BaseModel):
+    user_id: str
+    target_role: str
+    focus_area: Optional[str] = "General"
+    difficulty: str = "intermediate"
+
+class InterviewInteractionResponse(BaseModel):
+    session_id: str
+    question: str
+    question_type: str
+    previous_feedback: Optional[str] = None
+    previous_score: Optional[int] = None
+    state: str = "in_progress"
+
+class InterviewAnswerRequest(BaseModel):
+    user_id: str
+    session_id: str
+    answer: str
+
+class InterviewFinalReport(BaseModel):
+    session_id: str
+    user_id: str
+    role: str
+    overall_score: int
+    strengths: List[str]
+    improvements: List[str]
+    summary: str
+    transcript: List[Dict[str, str]]
+

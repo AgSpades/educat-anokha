@@ -6,8 +6,8 @@ from sqlalchemy.orm import Session
 import requests
 import logging
 
-from langchain_anthropic import ChatAnthropic
-import voyageai
+from langchain_groq import ChatGroq
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 from database import UserProfile, Application
 from config import settings
@@ -19,17 +19,15 @@ class JobRecommendationEngine:
     """Match users to jobs and analyze market trends."""
     
     def __init__(self):
-        self.llm = ChatAnthropic(
-            model_name=settings.ANTHROPIC_MODEL,
-            api_key=settings.ANTHROPIC_API_KEY,
-            temperature=0.5
+        self.llm = ChatGroq(
+            model_name=settings.GROQ_MODEL,
+            api_key=settings.GROQ_API_KEY,
+            temperature=0
         )
-        try:
-            self.voyage_client = voyageai.Client(api_key=settings.VOYAGE_API_KEY)
-        except AttributeError:
-            # voyageai 0.3.7+ uses different import
-            import voyageai as vo
-            self.voyage_client = vo.Client(api_key=settings.VOYAGE_API_KEY)
+        self.embedding_client = GoogleGenerativeAIEmbeddings(
+            model=settings.GEMINI_EMBEDDING_MODEL,
+            google_api_key=settings.GOOGLE_API_KEY
+        )
     
     async def analyze_market_trends(
         self,
@@ -230,11 +228,7 @@ Return ONLY the JSON object."""
         """
         try:
             # Get embeddings
-            embeddings = self.voyage_client.embed(
-                [user_profile, job_description],
-                model=settings.VOYAGE_MODEL,
-                input_type="document"
-            ).embeddings
+            embeddings = self.embedding_client.embed_documents([user_profile, job_description])
             
             # Calculate cosine similarity
             user_vec = np.array(embeddings[0])

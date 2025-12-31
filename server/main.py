@@ -1,5 +1,5 @@
 """Main FastAPI application for Career Mentor API."""
-from fastapi import FastAPI, Depends, HTTPException, UploadFile, File
+from fastapi import FastAPI, Depends, HTTPException, UploadFile, File, Form
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from datetime import datetime
@@ -22,12 +22,17 @@ from schemas import (
     MarketTrendsRequest,
     MarketTrendsResponse,
     LearningResourcesRequest,
-    LearningResource
+    LearningResource,
+    InterviewSessionRequest,
+    InterviewInteractionResponse,
+    InterviewAnswerRequest,
+    InterviewFinalReport
 )
 from services import CareerMentorService
 from resume_parser import resume_parser
 from job_recommender import job_engine
 from learning_resources import learning_resources
+from interview_agent import get_interview_agent
 
 # Configure logging
 logging.basicConfig(
@@ -298,6 +303,7 @@ if __name__ == "__main__":
 async def parse_resume(
     user_id: str,
     file: UploadFile = File(...),
+    resume_file_id: str = Form(None),
     db: Session = Depends(get_db)
 ):
     """
@@ -325,26 +331,27 @@ async def parse_resume(
         # Ensure user profile exists
         ensure_user_profile(db, user_id)
         
-        # Update user profile with extracted skills
-        profile = db.query(UserProfile).filter(UserProfile.user_id == user_id).first()
-        if profile and parsed_data.get('skills'):
-            # Get current skills as a Python list
-            current_skills_list = profile.skills if profile.skills else []  # type: ignore
-            if not isinstance(current_skills_list, list):
-                current_skills_list = []
-            
-            existing_skills = {s['name'] if isinstance(s, dict) else str(s) for s in current_skills_list}
-            new_skills = [
+        # Update user profile with extracted skills and resume info
+        profile_update = {}
+        
+        if parsed_data.get('skills'):
+            # Overwrite skills with new data from resume
+            new_skills_list = [
                 {"name": skill, "level": "intermediate", "verified": True}
                 for skill in parsed_data['skills']
-                if skill not in existing_skills
             ]
-            if new_skills:
-                updated_skills = current_skills_list + new_skills
-                db.query(UserProfile).filter(UserProfile.user_id == user_id).update(
-                    {"skills": updated_skills},
-                    synchronize_session=False
-                )
+            profile_update["skills"] = new_skills_list
+            
+        # Update resume info if file_id provided
+        if resume_file_id:
+            profile_update["resume_filename"] = file.filename
+            profile_update["resume_file_id"] = resume_file_id
+            
+        if profile_update:
+            db.query(UserProfile).filter(UserProfile.user_id == user_id).update(
+                profile_update,
+                synchronize_session=False
+            )
             db.commit()
         
         logger.info(f"Successfully parsed resume for user {user_id}")
@@ -448,4 +455,46 @@ async def get_learning_resources(
     
     except Exception as e:
         logger.error(f"Error fetching learning resources: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============== AI Mock Interviewer Endpoints ==============
+
+@app.post("/agent/interview/start", response_model=InterviewInteractionResponse)
+async def start_interview(
+    request: InterviewSessionRequest,
+    db: Session = Depends(get_db)
+):
+    """Start a new AI mock interview session."""
+    try:
+        agent = get_interview_agent(db)
+        return await agent.start_session(request)
+    except Exception as e:
+        logger.error(f"Error starting interview: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/agent/interview/submit", response_model=InterviewInteractionResponse)
+async def submit_interview_answer(
+    request: InterviewAnswerRequest,
+    db: Session = Depends(get_db)
+):
+    """Submit an answer and get feedback/next question."""
+    try:
+        agent = get_interview_agent(db)
+        return await agent.submit_answer(request.session_id, request.answer)
+    except Exception as e:
+        logger.error(f"Error submitting answer: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/agent/interview/report/{session_id}", response_model=InterviewFinalReport)
+async def get_interview_report(
+    session_id: str,
+    db: Session = Depends(get_db)
+):
+    """Get final report for a completed session."""
+    try:
+        agent = get_interview_agent(db)
+        return await agent.generate_final_report(session_id)
+    except Exception as e:
+        logger.error(f"Error generating report: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))

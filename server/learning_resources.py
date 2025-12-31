@@ -1,6 +1,6 @@
 """Learning resource recommendations."""
 from typing import List, Dict, Any, Optional
-from langchain_anthropic import ChatAnthropic
+from langchain_groq import ChatGroq
 from config import settings
 
 
@@ -8,9 +8,9 @@ class LearningResourceFetcher:
     """Fetch and recommend learning resources."""
     
     def __init__(self):
-        self.llm = ChatAnthropic(
-            model_name=settings.ANTHROPIC_MODEL,
-            api_key=settings.ANTHROPIC_API_KEY,
+        self.llm = ChatGroq(
+            model_name=settings.GROQ_MODEL,
+            api_key=settings.GROQ_API_KEY,
             temperature=0.7
         )
     

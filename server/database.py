@@ -22,6 +22,10 @@ class UserProfile(Base):
     experience_years = Column(Float, default=0)
     education_level = Column(String, nullable=True)
     
+    # Resume Data
+    resume_filename = Column(String, nullable=True)
+    resume_file_id = Column(String, nullable=True)
+    
     # JSON fields for complex data
     skills = Column(JSON, default=list)  # List[{name, level, last_used}]
     career_goals = Column(JSON, default=list)  # List[{target_role, timeline, priority}]

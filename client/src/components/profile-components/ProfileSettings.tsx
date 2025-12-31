@@ -24,7 +24,6 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
     email, setEmail,
     bio, setBio,
     photo, setPhoto,
-    resumeName, setResumeName,
     getInitials
 }) => {
     const { logout } = useAuth();
@@ -81,12 +80,6 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
     const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setPhoto(URL.createObjectURL(e.target.files[0]));
-        }
-    };
-
-    const handleResumeUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setResumeName(e.target.files[0].name);
         }
     };
 
@@ -147,31 +140,11 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
                                 className={`w-full px-4 py-3 rounded-xl border outline-none focus:ring-2 focus:ring-indigo-500/20 ${darkMode ? 'bg-zinc-950/50 border-zinc-800 text-white' : 'bg-zinc-50 border-zinc-300 text-zinc-900'}`}
                             />
                         </div>
-
-                        <div>
-                            <label className={`block text-sm font-medium mb-2 ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>Resume / CV</label>
-                            <div className={`relative dashed-border border-2 rounded-xl p-8 flex flex-col items-center justify-center text-center transition-all ${darkMode ? 'border-zinc-800 hover:bg-zinc-900' : 'border-zinc-300 hover:bg-zinc-50'}`}>
-                                <div className="h-10 w-10 bg-indigo-500/10 rounded-full flex items-center justify-center text-indigo-500 mb-3">
-                                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
-                                </div>
-                                {resumeName ? (
-                                    <span className={`font-medium ${darkMode ? 'text-white' : 'text-zinc-900'}`}>{resumeName}</span>
-                                ) : (
-                                    <div>
-                                        <span className="font-medium text-indigo-500 cursor-pointer hover:underline">Click to upload</span>
-                                        <span className={`text-sm ${darkMode ? 'text-zinc-500' : 'text-zinc-400'}`}> or drag and drop</span>
-                                    </div>
-                                )}
-                                <label className="absolute inset-0 cursor-pointer">
-                                    <input type="file" className="hidden" accept=".pdf,.doc,.docx" onChange={handleResumeUpload} />
-                                </label>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
                 {/* Career Profile Preferences */}
-                <div>
+                <div className="mt-8">
                     <div className="flex items-center justify-between mb-4">
                         <label className={`block text-sm font-medium ${darkMode ? 'text-zinc-300' : 'text-zinc-700'}`}>Career Preferences</label>
                     </div>
@@ -239,7 +212,7 @@ const ProfileSettings: React.FC<ProfileSettingsProps> = ({
                     {isSaving ? 'Saving...' : 'Save Changes'}
                 </button>
             </div>
-        </div>
+        </div >
     );
 };
 

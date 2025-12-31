@@ -3,7 +3,7 @@ from typing import Dict, Any
 from datetime import datetime
 import json
 
-from langchain_anthropic import ChatAnthropic
+from langchain_groq import ChatGroq
 from sqlalchemy.orm import Session
 
 from graph.state import AgentState
@@ -18,9 +18,9 @@ class AgentNodes:
     def __init__(self, db: Session):
         self.db = db
         self.tools = CareerMentorTools(db)
-        self.llm = ChatAnthropic(
-            model=settings.ANTHROPIC_MODEL,
-            anthropic_api_key=settings.ANTHROPIC_API_KEY,
+        self.llm = ChatGroq(
+            model_name=settings.GROQ_MODEL,
+            api_key=settings.GROQ_API_KEY,
             temperature=0.7
         )
     
@@ -37,7 +37,12 @@ class AgentNodes:
         # Get last user message
         if state["messages"]:
             last_msg = state["messages"][-1]
-            last_message = last_msg.content if hasattr(last_msg, 'content') else str(last_msg)
+            if isinstance(last_msg, dict):
+                last_message = last_msg.get('content', str(last_msg))
+            elif hasattr(last_msg, 'content'):
+                last_message = last_msg.content
+            else:
+                last_message = str(last_msg)
         else:
             last_message = ""
         
@@ -70,7 +75,12 @@ class AgentNodes:
         Analyze user message to determine intent and required actions.
         """
         last_msg = state["messages"][-1]
-        last_message = last_msg.content if hasattr(last_msg, 'content') else str(last_msg)
+        if isinstance(last_msg, dict):
+            last_message = last_msg.get('content', str(last_msg))
+        elif hasattr(last_msg, 'content'):
+            last_message = last_msg.content
+        else:
+            last_message = str(last_msg)
         
         # Context for intent detection
         context = {
@@ -170,7 +180,12 @@ Respond in JSON:
         Generate final response to user using all available context.
         """
         last_msg = state["messages"][-1]
-        user_message = last_msg.content if hasattr(last_msg, 'content') else str(last_msg)
+        if isinstance(last_msg, dict):
+            user_message = last_msg.get('content', str(last_msg))
+        elif hasattr(last_msg, 'content'):
+            user_message = last_msg.content
+        else:
+            user_message = str(last_msg)
         
         # Build rich context
         context_parts = [
@@ -202,7 +217,21 @@ Generate your response:"""
         
         response = await self.llm.ainvoke(response_prompt)
         
-        state["response"] = response.content
+        # Ensure response content is a string
+        content = response.content
+        if isinstance(content, list):
+            # Handle list of content blocks
+            text_parts = []
+            for block in content:
+                if isinstance(block, str):
+                    text_parts.append(block)
+                elif isinstance(block, dict) and 'text' in block:
+                    text_parts.append(block['text'])
+                else:
+                    text_parts.append(str(block))
+            state["response"] = " ".join(text_parts)
+        else:
+            state["response"] = str(content)
         
         # Generate suggestions
         state["suggestions"] = self._extract_suggestions(state)
@@ -216,7 +245,14 @@ Generate your response:"""
         """
         user_id = state["user_id"]
         last_msg = state["messages"][-1]
-        user_message = last_msg.content if hasattr(last_msg, 'content') else str(last_msg)
+        
+        if isinstance(last_msg, dict):
+            user_message = last_msg.get('content', str(last_msg))
+        elif hasattr(last_msg, 'content'):
+            user_message = last_msg.content
+        else:
+            user_message = str(last_msg)
+            
         agent_response = state.get("response", "")
         
         # Save user message as episodic memory

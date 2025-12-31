@@ -19,13 +19,14 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = "sqlite:///./career_mentor.db"
     
-    # Anthropic Claude
-    ANTHROPIC_API_KEY: str
-    ANTHROPIC_MODEL: str = "claude-haiku-4-5-20251001"
+    # Google Gemini (Legacy / Embeddings)
+    GOOGLE_API_KEY: str
+    GEMINI_MODEL: str = "gemini-pro"
+    GEMINI_EMBEDDING_MODEL: str = "models/text-embedding-004"
     
-    # Voyage AI Embeddings
-    VOYAGE_API_KEY: str
-    VOYAGE_MODEL: str = "voyage-3.5"
+    # Groq (Main LLM)
+    GROQ_API_KEY: str = ""
+    GROQ_MODEL: str = "llama-3.3-70b-versatile"
     
     # JSearch API (RapidAPI)
     JSEARCH_API_KEY: str = ""
@@ -37,7 +38,7 @@ class Settings(BaseSettings):
     LANGCHAIN_PROJECT: str = "career-mentor"
     
     # Memory & Vector Store
-    VECTOR_DIMENSION: int = 1024  # Voyage embeddings are 1024 dimensions
+    VECTOR_DIMENSION: int = 768  # Gemini text-embedding-004 is 768
     MEMORY_SIMILARITY_THRESHOLD: float = 0.7
     
     # Agent
