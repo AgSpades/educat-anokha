@@ -59,51 +59,39 @@ EducatAI is a full-stack career mentorship platform that combines the power of A
 
 ## ✨ Key Features
 
-### 1. 📄 Resume Parser & Persistence
+## ✨ Key Features
 
-- **Appwrite Storage Integration**: Securely uploads and persists resume files
-- **AI-Powered Parsing**: Uses Llama 3.3 (via Groq) to extract structured data from PDF/DOCX
-- Identifies: Name, email, phone, skills, experience, education, certifications, projects
-- **Automatic Profile Generation**: Creates structured user profiles from parsed data
+### 1. 🗺️ Dynamic Roadmap Agent
+- **Intelligent Planning**: Instead of static templates, the agent acts as an intelligent planner.
+- **Role Inference**: Analyzes user skills (e.g., Python + Pandas) to infer best-fit roles (e.g., "Data Scientist") if none are specified.
+- **Skill Gap Analysis**: Compares user profile against real-time market trends to identify missing skills.
+- **Agentic Planning**: Generates multi-step learning paths with specific, action-oriented milestones (e.g., "Deploy Microservices on AWS").
 
-### 2. 💼 Real-Time Job Recommendations
+### 2. 🤖 AI Mock Interviewer
+- **Real-time Technical Interviews**: Conducts voice-enabled technical interviews.
+- **Dynamic Questioning**: Generates relevant questions based on target role and difficulty level.
+- **Feedback Loop**: Analyzes user answers and provides immediate feedback on correctness and clarity.
+- **Performance Report**: Generates a summary of strengths and areas for improvement.
 
-- **JSearch API Integration**: Aggregates jobs from LinkedIn, Indeed, Glassdoor, ZipRecruiter
-- **Semantic Matching**: Voyage AI embeddings calculate 0-100 match scores
-- **Real URLs**: Direct links to company career pages and job boards
-- **Actual Salary Data**: Real compensation ranges from job postings
-- **Smart Filtering**: Location preferences, experience level, employment type
+### 3. 📄 Resume & Profile Engine
+- **AI-Powered Parsing**: Parses PDF/DOCX resumes to extract skills, education, and experience automatically.
+- **Appwrite Storage**: Securely uploads and persists resume files.
+- **Profile Generation**: Populates the UserProfile database to personalize all other features.
 
-### 3. 📊 Market Trends Analysis
+### 4. 💼 Job Recommendation Engine
+- **Smart Matching**: Matches structured user profiles against job opportunities.
+- **Market Analysis**: Analyzes market trends (salary, demand) for specific roles.
+- **Real-time Data**: Aggregates jobs from major platforms via JSearch API.
 
+### 5. 🧠 Long-term Memory
+- **Context Awareness**: Remembers past interactions, completed milestones, and interview performance.
+- **Evolving Guidance**: Allows the "Mentor" to give context-aware advice that evolves as the user learns.
+
+### 6. 📊 Market Trends Analysis
 - AI-powered analysis of current market conditions
 - Salary insights and compensation trends
 - Job demand forecasting
-- Skill gap identification
 - Industry-specific recommendations
-
-### 4. 📚 Learning Resources
-
-- Personalized course and tutorial recommendations
-- Multiple learning platforms: Coursera, Udemy, YouTube, official docs
-- Difficulty levels: Beginner, Intermediate, Advanced
-- Duration and cost estimates
-- Prerequisite guidance
-
-### 5. 🤖 AI Career Mentor
-
-- Conversational AI agent built with LangGraph
-- Contextual understanding of career goals
-- Long-term memory across sessions
-- Personalized advice and guidance
-- Progress tracking and milestone management
-
-### 6. 🗺️ Learning Roadmaps
-
-- Custom learning paths based on target roles
-- Milestone-based progress tracking
-- Weekly progress insights
-- Roadmap regeneration with updated goals
 
 ## 🚀 Getting Started
 
@@ -398,8 +386,8 @@ LOG_LEVEL = "INFO"
 ## 🔮 Future Enhancements
 
 - [ ] Add OCR support for image-based PDFs (Tesseract/AWS Textract)
-- [ ] Implement caching for JSearch API responses
-- [ ] Add interview preparation module
+- [x] Implement caching for JSearch API responses
+- [x] Add interview preparation module
 - [ ] Integration with more job boards (LinkedIn Jobs API)
 - [ ] Resume builder and optimization suggestions
 - [ ] Salary negotiation guidance

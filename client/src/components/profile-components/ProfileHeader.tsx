@@ -10,7 +10,7 @@ interface ProfileHeaderProps {
         skillsCount: number;
         milestonesCompleted: number;
         applicationsTracked: number;
-        currentFocus: string;
+        currentFocus: string | null;
     };
 }
 
@@ -27,7 +27,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ darkMode, name, photo, ge
                         </span>
                     </h1>
                     <p className={`text-lg ${darkMode ? 'text-zinc-400' : 'text-zinc-600'} max-w-md mx-auto`}>
-                        Your learning journey is on track. You're currently focusing on <span className="font-semibold text-indigo-500">{stats.currentFocus}</span>.
+                        {stats.currentFocus ? (
+                            <>
+                                Your learning journey is on track. You're currently focusing on <span className="font-semibold text-indigo-500">{stats.currentFocus}</span>.
+                            </>
+                        ) : (
+                            "Upload your resume to unlock your personalized career path."
+                        )}
                     </p>
                 </div>
 
@@ -53,8 +59,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ darkMode, name, photo, ge
                     name={name}
                     photo={photo}
                     getInitials={getInitials}
-                    role="AI Specialization Student"
-                    level="Level 4"
+                    role={stats.currentFocus || "Awaiting Assignment"}
+                    level={`Level ${Math.floor(stats.skillsCount / 5) + 1}`}
                 />
             </div>
         </div>

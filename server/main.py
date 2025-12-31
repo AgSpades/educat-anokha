@@ -342,6 +342,18 @@ async def parse_resume(
             ]
             profile_update["skills"] = new_skills_list
             
+            # Infer best fit role if not set
+            current_profile = db.query(UserProfile).filter(UserProfile.user_id == user_id).first()
+            if not current_profile or not current_profile.target_role:
+                from graph.tools import get_tools
+                tools = get_tools(db)
+                # Temporarily save skills to infer role
+                current_profile.skills = new_skills_list
+                db.commit() 
+                
+                best_fit_role = await tools.infer_best_fit_role(user_id)
+                profile_update["target_role"] = best_fit_role
+            
         # Update resume info if file_id provided
         if resume_file_id:
             profile_update["resume_filename"] = file.filename

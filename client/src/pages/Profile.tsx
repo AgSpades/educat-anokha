@@ -22,11 +22,16 @@ const Profile: React.FC = () => {
     const [bio, setBio] = useState('Passionate learner exploring the world of technology.');
 
     // Dynamic Stats State
-    const [stats, setStats] = useState({
+    const [stats, setStats] = useState<{
+        skillsCount: number;
+        milestonesCompleted: number;
+        applicationsTracked: number;
+        currentFocus: string | null;
+    }>({
         skillsCount: 0,
         milestonesCompleted: 0,
         applicationsTracked: 0,
-        currentFocus: "Software Engineering"
+        currentFocus: null
     });
 
     React.useEffect(() => {
@@ -40,7 +45,7 @@ const Profile: React.FC = () => {
                     skillsCount: data.skills?.length || 0,
                     milestonesCompleted: data.completed_milestones || 0,
                     applicationsTracked: data.total_applications || 0,
-                    currentFocus: data.current_focus || "Software Engineering"
+                    currentFocus: data.current_focus // Allow null
                 });
                 if (data.resume_filename) {
                     setResumeName(data.resume_filename);
