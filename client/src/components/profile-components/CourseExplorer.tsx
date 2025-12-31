@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getLearningResources } from '../../services/agentService';
 
 interface Course {
@@ -159,6 +160,8 @@ const CourseExplorer: React.FC<CourseExplorerProps> = ({ darkMode }) => {
                     ))}
                 </div>
             )}
+
+
         </div>
     );
 };
