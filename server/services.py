@@ -144,8 +144,14 @@ class CareerMentorService:
         if not profile:
             raise ValueError("User profile not found")
         
-        # Use provided target role or profile default
-        role = target_role or profile.target_role or "Software Engineer"
+        # Get tools (needed for inference and skill gaps)
+        from graph.tools import get_tools
+        tools = get_tools(self.db)
+        
+        # Use provided target role or profile default, otherwise infer dynamically
+        role = target_role or profile.target_role
+        if not role:
+            role = await tools.infer_best_fit_role(user_id)
         
         # Deactivate old roadmaps
         self.db.query(Roadmap).filter(
@@ -153,23 +159,23 @@ class CareerMentorService:
             Roadmap.is_active == True
         ).update({"is_active": False})
         
-        # Get skill gaps (simplified - production would use LLM)
-        from graph.tools import get_tools
-        tools = get_tools(self.db)
+        # Get skill gaps using LLM
         skill_gaps = await tools.get_skill_gaps(user_id, role)
         
-        # Generate milestones
+        # Generate milestones using LLM for detailed plan
+        roadmap_plan = await tools.generate_roadmap_plan(role, skill_gaps, timeline_weeks)
+        
         milestones = []
-        for i, skill in enumerate(skill_gaps[:5]):  # Top 5 gaps
+        for i, item in enumerate(roadmap_plan):
             milestone_id = str(uuid.uuid4())
             milestone = Milestone(
                 id=milestone_id,
                 user_id=user_id,
-                title=f"Master {skill.title()}",
-                description=f"Learn and practice {skill} through hands-on projects",
+                title=item.get("title", f"Milestone {i+1}"),
+                description=item.get("description", "Complete the assigned tasks."),
                 status=MilestoneStatus.NOT_STARTED.value,
-                skills_to_learn=[skill],
-                estimated_hours=20 + (i * 10),
+                skills_to_learn=item.get("skills", []),
+                estimated_hours=item.get("estimated_hours", 20),
                 deadline=datetime.utcnow() + timedelta(weeks=(i+1) * 2),
                 resources=[]
             )
