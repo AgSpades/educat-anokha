@@ -58,7 +58,7 @@ curl -X POST http://localhost:8000/agent/resume/parse \
 ### Market Trends Analysis
 - Analyzes job market for specific roles
 - Returns: demand level, salary range, top skills, growth trajectory
-- Uses Claude AI for real-time insights
+- Uses Groq (Llama 3.3) for real-time insights
 
 ### Learning Resources
 - Recommends courses, tutorials, videos, projects
@@ -68,7 +68,7 @@ curl -X POST http://localhost:8000/agent/resume/parse \
 ### Job Recommendations
 - Matches user skills to job opportunities
 - Returns: company, title, match score, salary range
-- Uses Voyage AI embeddings for semantic matching
+- Uses Gemini Embeddings for semantic matching
 
 ### Resume Parser
 - Extracts structured data from PDF/DOCX
