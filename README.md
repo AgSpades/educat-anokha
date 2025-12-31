@@ -6,6 +6,13 @@
 [![React](https://img.shields.io/badge/React-19.2-blue.svg)](https://react.dev/)
 [![LangGraph](https://img.shields.io/badge/LangGraph-Latest-purple.svg)](https://langchain-ai.github.io/langgraph/)
 [![Python](https://img.shields.io/badge/Python-3.11+-yellow.svg)](https://www.python.org/)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-orange.svg)](https://educat.appwrite.network)
+
+## 🌐 Live Demo
+
+Check out the live application here: **[EducatAI](https://educat.appwrite.network)**
+
+Backend API docs: **[API Docs](https://educat-api.saumyajit.dev/redoc)**
 
 ## 🎯 Overview
 
@@ -20,6 +27,8 @@ EducatAI is a full-stack career mentorship platform that combines the power of A
 
 ## 🏗️ Architecture
 
+![System Architecture](./images/educat_architecture.png)
+
 ### Tech Stack
 
 **Backend:**
@@ -27,34 +36,35 @@ EducatAI is a full-stack career mentorship platform that combines the power of A
 - **FastAPI** - Modern, high-performance Python web framework
 - **LangGraph** - Stateful AI agent orchestration framework
 - **PostgreSQL** - Primary database with pgvector extension
-- **Claude 3.5 Sonnet** (via Anthropic) - Advanced language model for AI reasoning
-- **Voyage AI** - Semantic embeddings for intelligent job matching
+- **Groq (Llama 3.3 70B)** - High-performance LLM for agent reasoning and resume parsing
+- **Google Gemini Embeddings** (`text-embedding-004`) - Semantic search and memory
 - **JSearch API** (RapidAPI) - Real-time job data aggregation
 
 **Frontend:**
 
 - **React 19** - Modern UI with hooks and concurrent features
 - **TypeScript** - Type-safe development
+- **Bun** - Fast JavaScript runtime & package manager
 - **Vite** - Lightning-fast build tool
 - **Tailwind CSS 4** - Utility-first styling
-- **React Router** - Client-side routing
-- **Appwrite** - Authentication and user management
+- **React Router 7** - Client-side routing
+- **Appwrite** - Authentication, User Management, and File Storage
 
 **AI & ML:**
 
 - **LangChain** - LLM application framework
-- **Voyage AI Embeddings** (voyage-3.5) - Semantic similarity scoring
-- **Claude 3.5 Sonnet** - Natural language understanding and generation
+- **Groq API** - Ultra-fast inference for Llama models
+- **Google Generative AI** - Semantic embeddings
 - **LangGraph State Machine** - Conversational agent state management
 
 ## ✨ Key Features
 
-### 1. 📄 Resume Parser
+### 1. 📄 Resume Parser & Persistence
 
-- Extract structured data from PDF and DOCX resumes
-- AI-powered parsing using Claude 3.5 Sonnet
+- **Appwrite Storage Integration**: Securely uploads and persists resume files
+- **AI-Powered Parsing**: Uses Llama 3.3 (via Groq) to extract structured data from PDF/DOCX
 - Identifies: Name, email, phone, skills, experience, education, certifications, projects
-- Automatic user profile creation from parsed data
+- **Automatic Profile Generation**: Creates structured user profiles from parsed data
 
 ### 2. 💼 Real-Time Job Recommendations
 
@@ -99,83 +109,44 @@ EducatAI is a full-stack career mentorship platform that combines the power of A
 
 ### Prerequisites
 
-- **Python 3.11+**
-- **Node.js 18+** and npm/yarn
-- **PostgreSQL 15+** with pgvector extension
+### Prerequisites
+
+- **Docker & Docker Compose** (Recommended for Backend)
+- **Bun** (for Frontend)
 - **API Keys**:
-  - Anthropic (Claude)
-  - Voyage AI
-  - JSearch API (RapidAPI)
+  - **Groq API Key** (for Llama 3.3 reasoning)
+  - **Google Gemini API Key** (for Embeddings)
+  - **JSearch API** (RapidAPI)
+  - **Appwrite Project & Bucket ID**
 
-### Backend Setup
+### Backend Setup (via Docker)
 
-1. **Clone the repository**
+1.  **Clone the repository**
 
-```bash
-git clone https://github.com/agspades/educat-anokha.git
-cd educat-anokha/server
-```
+    ```bash
+    git clone https://github.com/agspades/educat-anokha.git
+    cd educat-anokha/server
+    ```
 
-2. **Create virtual environment**
+2.  **Configure Environment**
 
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+    ```bash
+    cp .env.example .env
+    ```
 
-3. **Install dependencies**
+    Edit `.env` with your API keys (Groq, Google, JSearch).
+    *Note: Docker Compose will automatically handle the database connection.*
 
-```bash
-pip install -r requirements.txt
-```
+3.  **Run with Docker Compose**
 
-4. **Setup PostgreSQL**
+    ```bash
+    docker compose up -d --build
+    ```
 
-```bash
-# Create database
-createdb educat_db
+4.  The API will be available at `http://localhost:8085` (exposed port)
+    *   API Documentation: `http://localhost:8085/docs`
 
-# Enable pgvector extension
-psql educat_db -c "CREATE EXTENSION IF NOT EXISTS vector;"
-```
-
-5. **Configure environment variables**
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env` with your configuration:
-
-```env
-# Database
-DATABASE_URL=postgresql://user:password@localhost:5432/educat_db
-
-# AI Services
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
-VOYAGE_API_KEY=your_voyage_api_key_here
-
-# JSearch API (RapidAPI)
-JSEARCH_API_KEY=your_jsearch_api_key_here
-JSEARCH_API_HOST=jsearch.p.rapidapi.com
-
-# App Configuration
-APP_NAME=EducatAI Career Mentor
-APP_VERSION=1.0.0
-LOG_LEVEL=INFO
-```
-
-6. **Initialize database**
-
-```bash
-python -m database  # Creates tables
-```
-
-7. **Run the server**
-
-```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
-```
+    *Note: The internal container port is 8000, mapped to 8085 on host to avoid conflicts.*
 
 The API will be available at `http://localhost:8000`
 
@@ -193,16 +164,24 @@ cd ../client
 2. **Install dependencies**
 
 ```bash
-npm install
+bun install
 ```
 
-3. **Configure Appwrite** (for authentication)
-   Edit `src/lib/appwrite.ts` with your Appwrite project details.
+3. **Configure Environment** 
+   Create `.env` file in `client/` directory:
+
+```env
+VITE_APPWRITE_ENDPOINT=https://cloud.appwrite.io/v1
+VITE_APPWRITE_PROJECT_ID=your_project_id
+VITE_APPWRITE_BUCKET_ID=your_storage_bucket_id
+VITE_API_BASE_URL=http://localhost:8085
+```
+*(Note: VITE_API_BASE_URL should point to 8085 if using Docker backend)*
 
 4. **Run development server**
 
 ```bash
-npm run dev
+bun dev
 ```
 
 The frontend will be available at `http://localhost:5173`
@@ -323,8 +302,8 @@ educat-anokha/
 │   ├── config.py             # Pydantic settings
 │   ├── schemas.py            # Request/response models
 │   ├── services.py           # CareerMentorService (LangGraph agent)
-│   ├── resume_parser.py      # Resume parsing with Claude AI
-│   ├── job_recommender.py    # Job matching with JSearch + Voyage AI
+│   ├── resume_parser.py      # Resume parsing with Groq/Llama 3.3
+│   ├── job_recommender.py    # Job matching with JSearch + Gemini Embeddings
 │   ├── learning_resources.py # Learning resource recommendations
 │   ├── requirements.txt      # Python dependencies
 │   ├── .env.example          # Environment template
@@ -337,17 +316,17 @@ educat-anokha/
 
 ## 🔑 API Keys Setup
 
-### 1. Anthropic (Claude AI)
+### 1. Groq (Llama 3.3)
 
-1. Visit [console.anthropic.com](https://console.anthropic.com/)
+1. Visit [console.groq.com](https://console.groq.com/)
 2. Create account and generate API key
-3. Add to `.env`: `ANTHROPIC_API_KEY=sk-ant-...`
+3. Add to `.env`: `GROQ_API_KEY=gsk_...`
 
-### 2. Voyage AI (Embeddings)
+### 2. Google Gemini (Embeddings/Memory)
 
-1. Visit [dash.voyageai.com](https://dash.voyageai.com/)
-2. Sign up and create API key
-3. Add to `.env`: `VOYAGE_API_KEY=pa-...`
+1. Visit [aistudio.google.com](https://aistudio.google.com/)
+2. Create account and generate API key
+3. Add to `.env`: `GOOGLE_API_KEY=AIza...`
 
 ### 3. JSearch API (RapidAPI)
 
@@ -372,9 +351,9 @@ Key settings in `server/config.py`:
 DATABASE_URL = "postgresql://..."
 
 # AI Models
-ANTHROPIC_API_KEY = "sk-ant-..."
-ANTHROPIC_MODEL = "claude-3-5-sonnet-20241022"
-VOYAGE_API_KEY = "pa-..."
+GROQ_API_KEY = "gsk_..."
+GROQ_MODEL = "llama-3.3-70b-versatile"
+GOOGLE_API_KEY = "AIza..." # For Embeddings
 
 # JSearch API
 JSEARCH_API_KEY = "..."
@@ -443,11 +422,12 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🙏 Acknowledgments
 
-- **Anthropic** for Claude AI
-- **Voyage AI** for semantic embeddings
+- **Groq** for ultra-fast Llama 3.3 inference
+- **Google Gemini** for semantic embeddings
+- **Appwrite** for seamless backend services
 - **RapidAPI/JSearch** for job data aggregation
-- **LangChain** for the excellent AI framework
-- **FastAPI** for the amazing web framework
+- **LangChain** and **LangGraph** for AI orchestration
+- **FastAPI** for high-performance API handling
 
 ## 📞 Support
 
@@ -455,7 +435,7 @@ For questions or issues:
 
 - Open an issue on GitHub
 - Check the [documentation](server/docs/)
-- Review API docs at `/docs` endpoint
+- Review API docs here: [API Docs](https://educat-api.saumyajit.dev/redoc)
 
 ---
 

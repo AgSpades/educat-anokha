@@ -19,7 +19,8 @@ This guide will walk you through setting up the Career Mentor backend from scrat
 ### Required
 
 - **Python 3.10+** ([Download](https://www.python.org/downloads/))
-- **Google Cloud Account** for Gemini API ([Get API Key](https://ai.google.dev/))
+- **Groq Cloud Account** for Llama 3.3 ([Get API Key](https://console.groq.com/))
+- **Google Cloud Account** for Embeddings ([Get API Key](https://ai.google.dev/))
 
 ### Optional (Choose one for database)
 
@@ -58,10 +59,11 @@ The script will:
 
 ### 3. Configure API Key
 
-When prompted, edit `.env` and add your Gemini API key:
+When prompted, edit `.env` and add your API keys:
 
 ```env
-GOOGLE_API_KEY="your_actual_api_key_here"
+GROQ_API_KEY="your_groq_api_key_here"
+GOOGLE_API_KEY="your_google_api_key_here"
 ```
 
 ### 4. Run the script again
@@ -103,7 +105,8 @@ Edit `.env` with your configuration:
 
 ```env
 # Required
-GOOGLE_API_KEY="your_gemini_api_key_here"
+GROQ_API_KEY="your_groq_api_key_here"
+GOOGLE_API_KEY="your_google_api_key_here"
 
 # Database (choose one)
 DATABASE_URL="sqlite:///./career_mentor.db"
@@ -270,7 +273,8 @@ DATABASE_URL="sqlite:///./career_mentor.db"
 # DATABASE_URL="postgresql://user:pass@localhost:5432/career_mentor_db"
 
 # ============== MODEL CONFIG ==============
-GEMINI_MODEL="gemini-pro"           # or "gemini-pro-flash" (faster)
+GROQ_MODEL="llama-3.3-70b-versatile"
+GEMINI_EMBEDDING_MODEL="models/text-embedding-004"
 
 # ============== API CONFIG ==============
 API_HOST="0.0.0.0"

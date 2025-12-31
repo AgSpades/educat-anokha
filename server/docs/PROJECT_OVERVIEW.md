@@ -99,14 +99,16 @@ server/
     ┌────────────┴────────────┐
     │                         │
 ┌───▼────────────┐  ┌────────▼──────────┐
-│  Google Gemini │  │    Database       │
-│  • Embeddings  │  │  PostgreSQL/SQLite│
-│  • Chat (Pro)  │  │  • user_profiles  │
-│  • Flash       │  │  • memories       │
-└────────────────┘  │  • roadmaps       │
-                    │  • milestones     │
-                    │  • applications   │
-                    └───────────────────┘
+│    Groq API    │  │  Google Gemini    │
+│  (Llama 3.3)   │  │   (Embeddings)    │
+│ • Reasoning    │  │ • Memory Search   │
+│ • Parsing      │  │ • User Profiles   │
+└────────────────┘  └────────┬──────────┘
+                         │
+                    ┌────▼───────┐
+                    │ Database   │
+                    │ PostgreSQL │
+                    └────────────┘
 ```
 
 ---
@@ -228,12 +230,10 @@ applications
 
 ## 🛠️ Technology Stack
 
-| Component            | Technology              | Purpose                        |
-| -------------------- | ----------------------- | ------------------------------ |
 | **Web Framework**    | FastAPI                 | REST API endpoints             |
 | **Agent Framework**  | LangGraph               | Stateful agent orchestration   |
-| **LLM**              | Google Gemini Pro/Flash | Natural language understanding |
-| **Embeddings**       | Google Embedding-001    | Semantic search                |
+| **LLM**              | Groq (Llama 3.3 70B)    | Natural language reasoning     |
+| **Embeddings**       | Google Gemini           | Semantic search                |
 | **Database**         | PostgreSQL / SQLite     | Persistent storage             |
 | **Vector Store**     | pgvector / In-memory    | Similarity search              |
 | **ORM**              | SQLAlchemy              | Database abstraction           |
@@ -297,7 +297,8 @@ cd server
 ./start.sh
 
 # 2. Configure (edit .env)
-GOOGLE_API_KEY="your_key_here"
+GROQ_API_KEY="your_groq_key"
+GOOGLE_API_KEY="your_google_key"
 
 # 3. Test
 python example_usage.py

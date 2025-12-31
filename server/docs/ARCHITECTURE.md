@@ -17,25 +17,26 @@ This document explains the architecture and organization of the Career Mentor ba
 │  │                  API Layer (main.py)                  │  │
 │  │           Protected Endpoints + CORS                  │  │
 │  └─────────────────────┬─────────────────────────────────┘  │
-│                        │                                     │
+│                        │                                    │
 │  ┌─────────────────────▼─────────────────────────────────┐  │
 │  │            Service Layer (services.py)                │  │
 │  │         Business Logic + Orchestration                │  │
 │  └─────┬─────────────────────────────────────────────────┘  │
-│        │                                                     │
-│  ┌─────▼──────────┐  ┌────────────────┐  ┌──────────────┐  │
-│  │  LangGraph     │  │  Memory System │  │  Database    │  │
-│  │  Agent Graph   │◄─┤  (memory.py)   │◄─┤ (database.py)│  │
-│  └────────────────┘  └────────────────┘  └──────────────┘  │
+│        │                                                    │
+│  ┌─────▼──────────┐  ┌────────────────┐  ┌──────────────┐   │
+│  │  LangGraph     │  │  Memory System │  │  Database    │   │
+│  │  Agent Graph   │◄─┤  (memory.py)   │◄─┤ (database.py)│   │
+│  └────────────────┘  └────────────────┘  └──────────────┘   │
 └─────────────────────────────────────────────────────────────┘
                      │
                      ▼
 ┌─────────────────────────────────────────────────────────────┐
 │                    External Services                        │
-│  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐      │
-│  │ Google      │  │ PostgreSQL / │  │ LangSmith    │      │
-│  │ Gemini API  │  │ SQLite       │  │ (Optional)   │      │
-│  └─────────────┘  └──────────────┘  └──────────────┘      │
+│  ┌─────────────┐  ┌──────────────┐  ┌──────────────┐        │
+│  │  Groq API   │  │  Google      │  │ PostgreSQL / │        │
+│  │ (Llama 3.3) │  │  Gemini      │  │ SQLite       │        │
+│  │             │  │ (Embeddings) │  │              │        │
+│  └─────────────┘  └──────────────┘  └──────────────┘        │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -102,7 +103,8 @@ server/
   - CORS origins parsing
 - **Key Settings**:
   - Database URL
-  - Gemini API configuration
+  - Groq API configuration (Llama 3.3)
+  - Google Gemini API configuration (Embeddings)
   - Agent parameters
   - Memory thresholds
 
@@ -154,7 +156,7 @@ server/
 - **Purpose**: Long-term memory management
 - **Key Class**: `MemoryManager`
 - **Capabilities**:
-  - Add memories with embeddings
+  - Add memories with embeddings (Google Gemini)
   - Semantic search (cosine similarity)
   - Retrieve by importance/recency
   - Memory consolidation

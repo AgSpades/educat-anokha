@@ -61,14 +61,14 @@ employment_type = "FULLTIME"
 # Returns real jobs from LinkedIn, Indeed, etc.
 ```
 
-### 2. Semantic Matching with Voyage AI
+### 2. Semantic Matching with Google Gemini
 
 ```python
 # Each job is scored using embeddings:
 user_profile = "Backend Engineer with Python, Docker, AWS experience"
 job_description = "Senior Backend Developer needed with Python..."
 
-# Voyage AI calculates semantic similarity (0-100 score)
+# Gemini Embeddings calculates semantic similarity (0-100 score)
 match_score = calculate_semantic_match(user_profile, job_description)
 ```
 
@@ -109,7 +109,7 @@ Real jobs include:
 If JSearch API is unavailable:
 
 1. System logs a warning
-2. Falls back to AI-generated jobs (Claude AI)
+2. Falls back to AI-generated jobs (Llama 3.3 via Groq)
 3. Still provides relevant recommendations
 
 ## 💡 Free Tier Limits
@@ -157,7 +157,7 @@ Look for:
 | Current Openings  | ✅ Live jobs         | ❌ Made up    |
 | Salary Data       | ✅ Actual ranges     | ❌ Estimates  |
 | Job Details       | ✅ Full descriptions | ❌ Generic    |
-| Semantic Matching | ✅ Voyage AI         | ✅ Voyage AI  |
+| Semantic Matching | ✅ Gemini Embeddings | ✅ Gemini Embeddings |
 
 ## 🔒 Security Notes
 
@@ -170,7 +170,7 @@ Look for:
 
 - [JSearch API Documentation](https://rapidapi.com/letscrape-6bRBa3QguO5/api/jsearch)
 - [RapidAPI Dashboard](https://rapidapi.com/developer/dashboard)
-- [Voyage AI Documentation](https://docs.voyageai.com/)
+- [Google Gemini API Docs](https://ai.google.dev/docs)
 
 ## 🆘 Troubleshooting
 
