@@ -159,6 +159,8 @@ const CourseExplorer: React.FC<CourseExplorerProps> = ({ darkMode }) => {
                     ))}
                 </div>
             )}
+
+
         </div>
     );
 };

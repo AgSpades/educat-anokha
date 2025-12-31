@@ -22,11 +22,16 @@ const Profile: React.FC = () => {
     const [bio, setBio] = useState('Passionate learner exploring the world of technology.');
 
     // Dynamic Stats State
-    const [stats, setStats] = useState({
+    const [stats, setStats] = useState<{
+        skillsCount: number;
+        milestonesCompleted: number;
+        applicationsTracked: number;
+        currentFocus: string | null;
+    }>({
         skillsCount: 0,
         milestonesCompleted: 0,
         applicationsTracked: 0,
-        currentFocus: "Software Engineering"
+        currentFocus: null
     });
 
     React.useEffect(() => {
@@ -40,7 +45,7 @@ const Profile: React.FC = () => {
                     skillsCount: data.skills?.length || 0,
                     milestonesCompleted: data.completed_milestones || 0,
                     applicationsTracked: data.total_applications || 0,
-                    currentFocus: data.current_focus || "Software Engineering"
+                    currentFocus: data.current_focus // Allow null
                 });
                 if (data.resume_filename) {
                     setResumeName(data.resume_filename);
@@ -105,6 +110,17 @@ const Profile: React.FC = () => {
 
             {/* Floating Action Buttons Stack */}
             <div className="fixed bottom-8 right-8 z-50 flex flex-col gap-3 items-end">
+                {/* Mint Skills Button - Global */}
+                <Link to="/nft" className={`group relative flex items-center gap-3 pl-5 pr-5 py-1.5 rounded-full border shadow-2xl backdrop-blur-xl transition-all duration-300 hover:scale-105 ${darkMode ? 'bg-zinc-900/80 border-zinc-700 text-white hover:bg-zinc-800' : 'bg-white/80 border-zinc-200 text-zinc-900 hover:bg-zinc-50'}`}>
+                    <div className="flex flex-col items-end leading-none">
+                        <span className="text-sm font-bold tracking-wide">Mint Skills</span>
+                        <span className="text-[10px] text-indigo-500 font-medium">Web3 Verified</span>
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 flex items-center justify-center text-white shadow-lg ring-2 ring-white/20 group-hover:shadow-indigo-500/50 transition-shadow">
+                        <span className="text-xl">💎</span>
+                    </div>
+                </Link>
+
                 {/* Practice Interview Button */}
                 <Link to="/practice" className={`group relative flex items-center gap-3 pl-5 pr-5 py-1.5 rounded-full border shadow-2xl backdrop-blur-xl transition-all duration-300 hover:scale-105 ${darkMode ? 'bg-zinc-900/80 border-zinc-700 text-white hover:bg-zinc-800' : 'bg-white/80 border-zinc-200 text-zinc-900 hover:bg-zinc-50'}`}>
                     <span className="text-sm font-bold tracking-wide">Practice Interview</span>
