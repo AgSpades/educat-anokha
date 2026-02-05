@@ -210,7 +210,7 @@ Instructions:
 - Be encouraging and actionable
 - Reference specific skills and gaps when relevant
 - Suggest concrete next steps
-- Be concise and direct (max 2 very short paragraphs).
+- Keep your response very short.
 - Use a warm, professional tone
 
 Generate your response:"""
