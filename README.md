@@ -68,7 +68,7 @@ EducatAI is a full-stack career mentorship platform that combines the power of A
 - **Agentic Planning**: Generates multi-step learning paths with specific, action-oriented milestones (e.g., "Deploy Microservices on AWS").
 
 ### 2. 🤖 AI Mock Interviewer
-- **Real-time Technical Interviews**: Conducts voice-enabled technical interviews.
+- **Real-time Technical Interviews**: Conducts text-based technical interviews.
 - **Dynamic Questioning**: Generates relevant questions based on target role and difficulty level.
 - **Feedback Loop**: Analyzes user answers and provides immediate feedback on correctness and clarity.
 - **Performance Report**: Generates a summary of strengths and areas for improvement.
