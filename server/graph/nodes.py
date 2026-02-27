@@ -192,7 +192,7 @@ Respond in JSON:
             f"User message: {user_message}",
             f"Detected intent: {state.get('intent')}",
             f"Target role: {state.get('target_role', 'Not set')}",
-            f"Current skills: {len(state.get('current_skills', []))} skills tracked"
+            f"Current skills: {', '.join([s['name'] for s in state.get('current_skills', [])])}"
         ]
         
         if state.get("recent_memories"):
@@ -210,7 +210,7 @@ Instructions:
 - Be encouraging and actionable
 - Reference specific skills and gaps when relevant
 - Suggest concrete next steps
-- Be concise but thorough (3-5 paragraphs max)
+- Keep your response very short.
 - Use a warm, professional tone
 
 Generate your response:"""
