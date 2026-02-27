@@ -4,29 +4,58 @@ uvicorn[standard]
 python-dotenv
 pydantic
 pydantic-settings
-
+anyio
+python-multipart
 # LangChain & LangGraph
 langchain
 langchain-community
 langchain-anthropic
-langgraph
-langchain-postgres
 langchain-groq
-voyageai
+langchain-postgres
+langchain-google-genai
+langgraph
+langgraph-api
+langgraph-sdk
+langgraph-prebuilt
+langgraph-runtime-inmem
+langgraph-checkpoint
 
 # Database & Vector Store
-psycopg2-binary
-pgvector
 sqlalchemy
 alembic
-
-# Alternative: SQLite + ChromaDB (uncomment if not using Postgres)
-# chromadb
-
-# HTTP & API
+pgvector
+psycopg[binary,pool]
+asyncpg
+psycopg2-binary
+# HTTP & Networking
 httpx
 aiohttp
 requests
+h11
+httptools
+websockets
+watchfiles
+uvloop
+
+# Serialization & Performance
+orjson
+msgpack
+ormsgpack
+xxhash
+zstandard
+tenacity
+tqdm
+filelock
+fsspec
+
+# Security & Auth
+python-jose[cryptography]
+passlib[bcrypt]
+cryptography
+bcrypt
+cffi
+rsa
+ecdsa
 
 # Data Processing
 numpy
@@ -39,7 +68,15 @@ beautifulsoup4
 lxml
 python-magic
 
-# Utilities
-python-multipart
-python-jose[cryptography]
-passlib[bcrypt]
+# Observability
+opentelemetry-api
+opentelemetry-sdk
+opentelemetry-exporter-otlp-proto-http
+opentelemetry-proto
+
+# AI Providers
+voyageai
+google-genai
+huggingface_hub
+tokenizers
+protobuf
