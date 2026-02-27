@@ -59,8 +59,6 @@ EducatAI is a full-stack career mentorship platform that combines the power of A
 
 ## ✨ Key Features
 
-## ✨ Key Features
-
 ### 1. 🗺️ Dynamic Roadmap Agent
 - **Intelligent Planning**: Instead of static templates, the agent acts as an intelligent planner.
 - **Role Inference**: Analyzes user skills (e.g., Python + Pandas) to infer best-fit roles (e.g., "Data Scientist") if none are specified.
