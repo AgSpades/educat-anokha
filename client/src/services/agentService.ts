@@ -52,7 +52,7 @@ export const sendMessageToAgent = async (userId: string, message: string, retrie
     throw new Error("Failed to send message after retries");
 };
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8085';
 
 export const parseResume = async (userId: string, file: File, fileId?: string): Promise<any> => {
     const formData = new FormData();
